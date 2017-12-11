@@ -56,7 +56,7 @@ class SiteSchema extends DevSchemaProvider
      */
     public function getAttributes($site)
     {
-        assert('$site instanceof '.Site::class);
+        assert($site instanceof Site);
 
         return [
             Site::ATTRIBUTE_NAME => $site->{Site::ATTRIBUTE_NAME},
@@ -68,7 +68,7 @@ class SiteSchema extends DevSchemaProvider
      */
     public function getRelationships($site, $isPrimary, array $includeRelationships)
     {
-        assert('$site instanceof '.Site::class);
+        assert($site instanceof Site);
 
         if (($isPrimary && $this->isIsLinksInPrimary()) || (!$isPrimary && $this->isIsLinksInIncluded())) {
             $selfLink = $this->getRelationshipSelfLink($site, Site::LINK_POSTS);

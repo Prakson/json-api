@@ -41,7 +41,7 @@ class PostSchema extends DevSchemaProvider
      */
     public function getAttributes($post)
     {
-        assert('$post instanceof '.Post::class);
+        assert($post instanceof Post);
 
         return [
             Post::ATTRIBUTE_TITLE => $post->{Post::ATTRIBUTE_TITLE},
@@ -54,7 +54,7 @@ class PostSchema extends DevSchemaProvider
      */
     public function getRelationships($post, $isPrimary, array $includeRelationships)
     {
-        assert('$post instanceof '.Post::class);
+        assert($post instanceof Post);
 
         if (($isPrimary && $this->isIsLinksInPrimary()) || (!$isPrimary && $this->isIsLinksInIncluded())) {
             $authorSelfLink   = $this->getRelationshipSelfLink($post, Post::LINK_AUTHOR);

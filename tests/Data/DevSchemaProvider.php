@@ -125,7 +125,7 @@ abstract class DevSchemaProvider extends SchemaProvider
      */
     public function linkAddTo($name, $key, $value)
     {
-        assert('is_string($name) && is_string($key)');
+        assert(is_string($name) && is_string($key));
         $this->linkAddTo[] = [$name, $key, $value];
     }
 
@@ -139,7 +139,7 @@ abstract class DevSchemaProvider extends SchemaProvider
      */
     public function linkRemoveFrom($name, $key)
     {
-        assert('is_string($name) && is_string($key)');
+        assert(is_string($name) && is_string($key));
         $this->linkRemoveFrom[] = [$name, $key];
     }
 
@@ -152,7 +152,7 @@ abstract class DevSchemaProvider extends SchemaProvider
      */
     public function linkRemove($name)
     {
-        assert('is_string($name)');
+        assert(is_string($name));
         $this->linkRemove[] = $name;
     }
 

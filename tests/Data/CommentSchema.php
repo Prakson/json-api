@@ -51,7 +51,7 @@ class CommentSchema extends DevSchemaProvider
      */
     public function getRelationships($comment, $isPrimary, array $includeRelationships)
     {
-        assert('$comment instanceof '.Comment::class);
+        assert($comment instanceof Comment);
 
         if (isset($includeRelationships[Comment::LINK_AUTHOR]) === true) {
             $data = $comment->{Comment::LINK_AUTHOR};
