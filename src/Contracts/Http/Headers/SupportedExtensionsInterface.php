@@ -28,12 +28,12 @@ interface SupportedExtensionsInterface
      *
      * @return void
      */
-    public function setExtensions($extensions);
+    public function setExtensions(string $extensions): void;
 
     /**
      * Get supported extensions.
      *
      * @return string
      */
-    public function getExtensions();
+    public function getExtensions(): string;
 }

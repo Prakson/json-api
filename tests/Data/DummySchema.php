@@ -34,7 +34,7 @@ class DummySchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getId($resource)
+    public function getId($resource): ?string
     {
         return 'dummyId';
     }
@@ -42,7 +42,7 @@ class DummySchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getAttributes($author)
+    public function getAttributes($author): ?array
     {
         return [];
     }

@@ -16,22 +16,32 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Schema\SchemaProvider;
+use Neomerx\JsonApi\Schema\SchemaProvider;
+use Neomerx\Samples\JsonApi\Models\Author;
 
 /**
  * @package Neomerx\Samples\JsonApi
  */
 class AuthorSchema extends SchemaProvider
 {
+    /**
+     * @inheritdoc
+     */
     protected $resourceType = 'people';
 
-    public function getId($author)
+    /**
+     * @inheritdoc
+     */
+    public function getId($author): ?string
     {
         /** @var Author $author */
         return $author->authorId;
     }
 
-    public function getAttributes($author)
+    /**
+     * @inheritdoc
+     */
+    public function getAttributes($author): ? array
     {
         /** @var Author $author */
         return [

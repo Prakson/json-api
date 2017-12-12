@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-use \Closure;
-use \Neomerx\JsonApi\Factories\Exceptions;
-use \Neomerx\JsonApi\Contracts\Schema\RelationshipObjectInterface;
+use Closure;
+use Neomerx\JsonApi\Contracts\Schema\RelationshipObjectInterface;
+use Neomerx\JsonApi\Factories\Exceptions;
 
 /**
  * @package Neomerx\JsonApi
@@ -61,12 +61,12 @@ class RelationshipObject implements RelationshipObjectInterface
     private $isDataEvaluated = false;
 
     /**
-     * @param string                                                        $name
-     * @param object|array|null|Closure                                     $data
+     * @param string                    $name
+     * @param object|array|null|Closure $data
      * @param array<string,\Neomerx\JsonApi\Contracts\Schema\LinkInterface> $links
-     * @param object|array|null|Closure                                     $meta
-     * @param bool                                                          $isShowData
-     * @param bool                                                          $isRoot
+     * @param object|array|null|Closure $meta
+     * @param bool                      $isShowData
+     * @param bool                      $isRoot
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
@@ -94,7 +94,7 @@ class RelationshipObject implements RelationshipObjectInterface
     /**
      * @inheritdoc
      */
-    public function getName()
+    public function getName(): ?string
     {
         return $this->name;
     }
@@ -109,7 +109,7 @@ class RelationshipObject implements RelationshipObjectInterface
 
             if ($this->data instanceof Closure) {
                 /** @var Closure $data */
-                $data = $this->data;
+                $data       = $this->data;
                 $this->data = $data();
             }
         }
@@ -120,7 +120,7 @@ class RelationshipObject implements RelationshipObjectInterface
     /**
      * @inheritdoc
      */
-    public function getLinks()
+    public function getLinks(): array
     {
         return $this->links;
     }
@@ -131,7 +131,7 @@ class RelationshipObject implements RelationshipObjectInterface
     public function getMeta()
     {
         if ($this->meta instanceof Closure) {
-            $meta = $this->meta;
+            $meta       = $this->meta;
             $this->meta = $meta();
         }
 
@@ -141,7 +141,7 @@ class RelationshipObject implements RelationshipObjectInterface
     /**
      * @inheritdoc
      */
-    public function isShowData()
+    public function isShowData(): bool
     {
         return $this->isShowData;
     }
@@ -149,7 +149,7 @@ class RelationshipObject implements RelationshipObjectInterface
     /**
      * @inheritdoc
      */
-    public function isRoot()
+    public function isRoot(): bool
     {
         return $this->isRoot;
     }

@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Closure;
-use \Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
+use Closure;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -32,5 +32,5 @@ interface CustomContainerInterface extends ContainerInterface
      *
      * @return void
      */
-    public function register($type, $schema);
+    public function register(string $type, $schema): void;
 }

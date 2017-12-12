@@ -26,5 +26,5 @@ interface HeadersCheckerInterface
      *
      * @return void
      */
-    public function checkHeaders(HeaderParametersInterface $parameters);
+    public function checkHeaders(HeaderParametersInterface $parameters): void;
 }

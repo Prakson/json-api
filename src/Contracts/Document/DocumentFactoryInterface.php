@@ -26,30 +26,30 @@ interface DocumentFactoryInterface
      *
      * @return DocumentInterface
      */
-    public function createDocument();
+    public function createDocument(): DocumentInterface;
 
     /**
      * Create error instance.
      *
-     * @param int|string|null    $idx
+     * @param string|null        $idx
      * @param LinkInterface|null $aboutLink
      * @param string|null        $status
      * @param string|null        $code
      * @param string|null        $title
      * @param string|null        $detail
-     * @param mixed|null         $source
+     * @param array|null         $source
      * @param array|null         $meta
      *
      * @return ErrorInterface
      */
     public function createError(
-        $idx = null,
+        string $idx = null,
         LinkInterface $aboutLink = null,
-        $status = null,
-        $code = null,
-        $title = null,
-        $detail = null,
-        $source = null,
+        string $status = null,
+        string $code = null,
+        string $title = null,
+        string $detail = null,
+        array $source = null,
         array $meta = null
-    );
+    ): ErrorInterface;
 }

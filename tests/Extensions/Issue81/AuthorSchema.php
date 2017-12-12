@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \LogicException;
-use \Neomerx\Tests\JsonApi\Data\AuthorSchema as ParentSchema;
+use LogicException;
+use Neomerx\Tests\JsonApi\Data\AuthorSchema as ParentSchema;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -32,7 +32,7 @@ class AuthorSchema extends ParentSchema
     /**
      * @inheritdoc
      */
-    public function getId($author)
+    public function getId($author): ?string
     {
         throw new LogicException('Should not be used');
     }
@@ -40,7 +40,7 @@ class AuthorSchema extends ParentSchema
     /**
      * @inheritdoc
      */
-    public function getAttributes($author)
+    public function getAttributes($author): ?array
     {
         throw new LogicException('Should not be used');
     }
@@ -48,7 +48,7 @@ class AuthorSchema extends ParentSchema
     /**
      * @inheritdoc
      */
-    public function getRelationships($author, $isPrimary, array $includeRelationships)
+    public function getRelationships($author, bool $isPrimary, array $includeRelationships): ?array
     {
         throw new LogicException('Should not be used');
     }

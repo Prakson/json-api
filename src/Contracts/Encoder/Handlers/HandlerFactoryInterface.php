@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Document\DocumentInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\ParametersAnalyzerInterface;
+use Neomerx\JsonApi\Contracts\Document\DocumentInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\ParametersAnalyzerInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -32,5 +32,8 @@ interface HandlerFactoryInterface
      *
      * @return ReplyInterpreterInterface
      */
-    public function createReplyInterpreter(DocumentInterface $document, ParametersAnalyzerInterface $parameterAnalyzer);
+    public function createReplyInterpreter(
+        DocumentInterface $document,
+        ParametersAnalyzerInterface $parameterAnalyzer
+    ): ReplyInterpreterInterface;
 }

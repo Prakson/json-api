@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Exceptions\JsonApiException as E;
-use \Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeadersCheckerInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersInterface;
+use Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeadersCheckerInterface;
+use Neomerx\JsonApi\Exceptions\JsonApiException as E;
 
 /**
  * @package Neomerx\JsonApi
@@ -44,7 +44,7 @@ class RestrictiveHeadersChecker implements HeadersCheckerInterface
      *
      * @return void
      */
-    public function checkHeaders(HeaderParametersInterface $parameters)
+    public function checkHeaders(HeaderParametersInterface $parameters): void
     {
         // Note: for these checks the order is specified by spec. See details inside.
 
@@ -62,7 +62,7 @@ class RestrictiveHeadersChecker implements HeadersCheckerInterface
      *
      * @return void
      */
-    protected function checkAcceptHeader(HeaderParametersInterface $parameters)
+    protected function checkAcceptHeader(HeaderParametersInterface $parameters): void
     {
         $this->codecMatcher->matchEncoder($parameters->getAcceptHeader());
 
@@ -82,7 +82,7 @@ class RestrictiveHeadersChecker implements HeadersCheckerInterface
      *
      * @return void
      */
-    protected function checkContentTypeHeader(HeaderParametersInterface $parameters)
+    protected function checkContentTypeHeader(HeaderParametersInterface $parameters): void
     {
         // Do not allow specify more than 1 media type for input data. Otherwise which one is correct?
         if (count($parameters->getContentTypeHeader()->getMediaTypes()) > 1) {

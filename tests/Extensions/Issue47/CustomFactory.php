@@ -16,8 +16,9 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Factories\Factory;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\Contracts\Schema\ResourceObjectInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\Factories\Factory;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -30,9 +31,9 @@ class CustomFactory extends Factory
     public function createResourceObject(
         SchemaProviderInterface $schema,
         $resource,
-        $isInArray,
-        $attributeKeysFilter = null
-    ) {
+        bool $isInArray,
+        array $attributeKeysFilter = null
+    ): ResourceObjectInterface {
         return new CustomResourceObject($schema, $resource, $isInArray, $attributeKeysFilter);
     }
 }

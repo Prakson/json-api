@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Iterator;
+use Iterator;
 
 /**
  * @package Neomerx\JsonApi
@@ -28,7 +28,7 @@ interface ParserInterface
      *
      * @param array|object|null|Iterator $data
      *
-     * @return Iterator ParserReplyInterface
+     * @return iterable ParserReplyInterface
      */
-    public function parse($data);
+    public function parse($data): iterable;
 }

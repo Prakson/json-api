@@ -26,19 +26,19 @@ interface SortParameterInterface
      *
      * @return string
      */
-    public function getField();
+    public function getField(): string;
 
     /**
      * Get true if parameter is ascending.
      *
      * @return bool
      */
-    public function isAscending();
+    public function isAscending(): bool;
 
     /**
      * Get true if parameter is descending.
      *
      * @return bool
      */
-    public function isDescending();
+    public function isDescending(): bool;
 }

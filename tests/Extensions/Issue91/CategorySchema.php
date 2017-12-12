@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Schema\SchemaProvider;
+use Neomerx\JsonApi\Schema\SchemaProvider;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -31,7 +31,7 @@ class CategorySchema extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getId($resource)
+    public function getId($resource): ?string
     {
         /** @var Category $resource */
         return $resource->index;
@@ -40,7 +40,7 @@ class CategorySchema extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getAttributes($resource)
+    public function getAttributes($resource): ?array
     {
         /** @var Category $resource */
         return [
@@ -51,7 +51,7 @@ class CategorySchema extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getRelationships($resource, $isPrimary, array $includeRelationships)
+    public function getRelationships($resource, bool $isPrimary, array $includeRelationships): ?array
     {
         /** @var Category $resource */
         return [
@@ -62,7 +62,7 @@ class CategorySchema extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getIncludePaths()
+    public function getIncludePaths(): array
     {
         return [
             'parent',

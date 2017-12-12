@@ -35,12 +35,12 @@ interface HeaderInterface
      *
      * @return string
      */
-    public function getName();
+    public function getName(): string;
 
     /**
      * Get media types.
      *
      * @return MediaTypeInterface[]
      */
-    public function getMediaTypes();
+    public function getMediaTypes(): array;
 }

@@ -16,19 +16,17 @@
  * limitations under the License.
  */
 
-use \Psr\Log\LoggerAwareInterface as PSR3;
-
-use \Neomerx\JsonApi\Encoder\EncoderOptions;
-use \Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
-use \Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
-use \Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
-
-use \Neomerx\JsonApi\Contracts\Http\HttpFactoryInterface as HttpFI;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface as SchFI;
-use \Neomerx\JsonApi\Contracts\Document\DocumentFactoryInterface as DFI;
-use \Neomerx\JsonApi\Contracts\Encoder\Stack\StackFactoryInterface as StkFI;
-use \Neomerx\JsonApi\Contracts\Encoder\Parser\ParserFactoryInterface as PrsFI;
-use \Neomerx\JsonApi\Contracts\Encoder\Handlers\HandlerFactoryInterface as HFI;
+use Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
+use Neomerx\JsonApi\Contracts\Document\DocumentFactoryInterface as DFI;
+use Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Handlers\HandlerFactoryInterface as HFI;
+use Neomerx\JsonApi\Contracts\Encoder\Parser\ParserFactoryInterface as PrsFI;
+use Neomerx\JsonApi\Contracts\Encoder\Stack\StackFactoryInterface as StkFI;
+use Neomerx\JsonApi\Contracts\Http\HttpFactoryInterface as HttpFI;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface as SchFI;
+use Neomerx\JsonApi\Encoder\EncoderOptions;
+use Psr\Log\LoggerAwareInterface as PSR3;
 
 /**
  * @package Neomerx\JsonApi
@@ -43,12 +41,15 @@ interface FactoryInterface extends DFI, PrsFI, StkFI, HFI, HttpFI, SchFI, PSR3
      *
      * @return EncoderInterface
      */
-    public function createEncoder(ContainerInterface $container, EncoderOptions $encoderOptions = null);
+    public function createEncoder(
+        ContainerInterface $container,
+        EncoderOptions $encoderOptions = null
+    ): EncoderInterface;
 
     /**
      * Create codec matcher.
      *
      * @return CodecMatcherInterface
      */
-    public function createCodecMatcher();
+    public function createCodecMatcher(): CodecMatcherInterface;
 }

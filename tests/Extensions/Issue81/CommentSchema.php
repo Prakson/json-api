@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-use \Neomerx\Tests\JsonApi\Data\Author;
-use \Neomerx\Tests\JsonApi\Data\Comment;
-use \Neomerx\Tests\JsonApi\Data\CommentSchema as ParentSchema;
+use Neomerx\Tests\JsonApi\Data\Author;
+use Neomerx\Tests\JsonApi\Data\Comment;
+use Neomerx\Tests\JsonApi\Data\CommentSchema as ParentSchema;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -28,7 +28,7 @@ class CommentSchema extends ParentSchema
     /**
      * @inheritdoc
      */
-    public function getRelationships($comment, $isPrimary, array $includeRelationships)
+    public function getRelationships($comment, bool $isPrimary, array $includeRelationships): ?array
     {
         assert($comment instanceof Comment);
 
@@ -55,7 +55,7 @@ class CommentSchema extends ParentSchema
     /**
      * @inheritdoc
      */
-    public function getIncludedResourceLinks($resource)
+    public function getIncludedResourceLinks($resource): array
     {
         return [];
     }

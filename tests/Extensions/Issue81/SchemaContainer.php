@@ -17,6 +17,7 @@
  */
 
 use Closure;
+use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
 use Neomerx\JsonApi\Schema\Container;
 
 /**
@@ -27,7 +28,7 @@ class SchemaContainer extends Container
     /**
      * @inheritdoc
      */
-    protected function createSchemaFromClosure(Closure $closure)
+    protected function createSchemaFromClosure(Closure $closure): SchemaProviderInterface
     {
         $schema = $closure($this->getFactory(), $this);
 
@@ -37,7 +38,7 @@ class SchemaContainer extends Container
     /**
      * @inheritdoc
      */
-    protected function createSchemaFromClassName($className)
+    protected function createSchemaFromClassName(string $className): SchemaProviderInterface
     {
         $schema = new $className($this->getFactory(), $this);
 

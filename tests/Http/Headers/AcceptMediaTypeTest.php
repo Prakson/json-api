@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Neomerx\Tests\JsonApi\BaseTestCase;
-use \Neomerx\JsonApi\Http\Headers\AcceptMediaType;
+use Neomerx\JsonApi\Http\Headers\AcceptMediaType;
+use Neomerx\Tests\JsonApi\BaseTestCase;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -31,26 +31,6 @@ class AcceptMediaTypeTest extends BaseTestCase
      */
     public function testInvalidConstructorParams1()
     {
-        new AcceptMediaType(1, null, 'subtype');
-    }
-
-    /**
-     * Test invalid constructor parameters.
-     *
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidConstructorParams2()
-    {
-        new AcceptMediaType(1, 'type', null);
-    }
-
-    /**
-     * Test invalid constructor parameters.
-     *
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidConstructorParams4()
-    {
         new AcceptMediaType(1, 'type', 'subtype', null, 5);
     }
 
@@ -59,17 +39,7 @@ class AcceptMediaTypeTest extends BaseTestCase
      *
      * @expectedException \InvalidArgumentException
      */
-    public function testInvalidConstructorParams6()
-    {
-        new AcceptMediaType(1, 'type', 'subtype', null, 0.4, 1234);
-    }
-
-    /**
-     * Test invalid constructor parameters.
-     *
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidConstructorParams7()
+    public function testInvalidConstructorParams2()
     {
         new AcceptMediaType(-1, 'type', 'subtype', null, 0.4, null);
     }

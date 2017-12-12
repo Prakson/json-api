@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Factories\Exceptions;
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
-use \Neomerx\JsonApi\Contracts\Schema\ResourceObjectInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Schema\ResourceObjectInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\Factories\Exceptions;
 
 /**
  * @package Neomerx\JsonApi
@@ -141,7 +141,7 @@ class ResourceObject implements ResourceObjectInterface
     /**
      * @inheritdoc
      */
-    public function getType()
+    public function getType(): string
     {
         return $this->schema->getResourceType();
     }
@@ -149,10 +149,10 @@ class ResourceObject implements ResourceObjectInterface
     /**
      * @inheritdoc
      */
-    public function getId()
+    public function getId(): ?string
     {
         if ($this->idx === false) {
-            $index = $this->schema->getId($this->resource);
+            $index     = $this->schema->getId($this->resource);
             $this->idx = $index === null ? $index : (string)$index;
         }
 
@@ -162,7 +162,7 @@ class ResourceObject implements ResourceObjectInterface
     /**
      * @inheritdoc
      */
-    public function getAttributes()
+    public function getAttributes(): ?array
     {
         if ($this->attributes === null) {
             $attributes = $this->schema->getAttributes($this->resource);
@@ -178,7 +178,7 @@ class ResourceObject implements ResourceObjectInterface
     /**
      * @inheritdoc
      */
-    public function getSelfSubLink()
+    public function getSelfSubLink(): LinkInterface
     {
         if ($this->isSelfSubLinkSet === false) {
             $this->selfSubLink      = $this->schema->getSelfSubLink($this->resource);
@@ -191,7 +191,7 @@ class ResourceObject implements ResourceObjectInterface
     /**
      * @inheritdoc
      */
-    public function getResourceLinks()
+    public function getResourceLinks(): array
     {
         return $this->schema->getResourceLinks($this->resource);
     }
@@ -199,7 +199,7 @@ class ResourceObject implements ResourceObjectInterface
     /**
      * @inheritdoc
      */
-    public function getIncludedResourceLinks()
+    public function getIncludedResourceLinks(): array
     {
         return $this->schema->getIncludedResourceLinks($this->resource);
     }
@@ -207,7 +207,7 @@ class ResourceObject implements ResourceObjectInterface
     /**
      * @inheritdoc
      */
-    public function isShowAttributesInIncluded()
+    public function isShowAttributesInIncluded(): bool
     {
         return $this->schema->isShowAttributesInIncluded();
     }
@@ -215,7 +215,7 @@ class ResourceObject implements ResourceObjectInterface
     /**
      * @inheritdoc
      */
-    public function isInArray()
+    public function isInArray(): bool
     {
         return $this->isInArray;
     }
@@ -226,7 +226,7 @@ class ResourceObject implements ResourceObjectInterface
     public function getPrimaryMeta()
     {
         if ($this->isPrimaryMetaSet === false) {
-            $this->primaryMeta = $this->schema->getPrimaryMeta($this->resource);
+            $this->primaryMeta      = $this->schema->getPrimaryMeta($this->resource);
             $this->isPrimaryMetaSet = true;
         }
 
@@ -239,7 +239,7 @@ class ResourceObject implements ResourceObjectInterface
     public function getInclusionMeta()
     {
         if ($this->isInclusionMetaSet === false) {
-            $this->inclusionMeta = $this->schema->getInclusionMeta($this->resource);
+            $this->inclusionMeta      = $this->schema->getInclusionMeta($this->resource);
             $this->isInclusionMetaSet = true;
         }
 
@@ -252,7 +252,7 @@ class ResourceObject implements ResourceObjectInterface
     public function getRelationshipsPrimaryMeta()
     {
         if ($this->isRelPrimaryMetaSet === false) {
-            $this->relPrimaryMeta = $this->schema->getRelationshipsPrimaryMeta($this->resource);
+            $this->relPrimaryMeta      = $this->schema->getRelationshipsPrimaryMeta($this->resource);
             $this->isRelPrimaryMetaSet = true;
         }
 
@@ -266,7 +266,7 @@ class ResourceObject implements ResourceObjectInterface
     {
         if ($this->isRelIncMetaSet === false) {
             $this->relInclusionMeta = $this->schema->getRelationshipsInclusionMeta($this->resource);
-            $this->isRelIncMetaSet = true;
+            $this->isRelIncMetaSet  = true;
         }
 
         return $this->relInclusionMeta;
@@ -278,7 +278,7 @@ class ResourceObject implements ResourceObjectInterface
     public function getLinkageMeta()
     {
         if ($this->isRelationshipMetaSet === false) {
-            $this->relationshipMeta = $this->schema->getLinkageMeta($this->resource);
+            $this->relationshipMeta      = $this->schema->getLinkageMeta($this->resource);
             $this->isRelationshipMetaSet = true;
         }
 

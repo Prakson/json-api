@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -33,5 +33,5 @@ interface HeaderParametersParserInterface
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function parse(ServerRequestInterface $request, $checkContentType = true);
+    public function parse(ServerRequestInterface $request, bool $checkContentType = true): HeaderParametersInterface;
 }

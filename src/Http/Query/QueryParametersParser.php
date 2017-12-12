@@ -16,15 +16,16 @@
  * limitations under the License.
  */
 
-use \Psr\Log\LoggerAwareTrait;
-use \Psr\Log\LoggerAwareInterface;
-use \Neomerx\JsonApi\Document\Error;
-use \Neomerx\JsonApi\I18n\Translator as T;
-use \Psr\Http\Message\ServerRequestInterface;
-use \Neomerx\JsonApi\Exceptions\JsonApiException as E;
-use \Neomerx\JsonApi\Contracts\Http\HttpFactoryInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\SortParameterInterface;
-use \Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\SortParameterInterface;
+use Neomerx\JsonApi\Contracts\Http\HttpFactoryInterface;
+use Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface;
+use Neomerx\JsonApi\Document\Error;
+use Neomerx\JsonApi\Exceptions\JsonApiException as E;
+use Neomerx\JsonApi\I18n\Translator as T;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
 /**
  * @package Neomerx\JsonApi
@@ -49,7 +50,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
     /**
      * @inheritdoc
      */
-    public function parse(ServerRequestInterface $request)
+    public function parse(ServerRequestInterface $request): EncodingParametersInterface
     {
         return $this->parseQueryParameters($request->getQueryParams());
     }
@@ -57,7 +58,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
     /**
      * @inheritdoc
      */
-    public function parseQueryParameters(array $parameters)
+    public function parseQueryParameters(array $parameters): EncodingParametersInterface
     {
         return $this->factory->createQueryParameters(
             $this->getIncludePaths($parameters),
@@ -74,7 +75,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
      *
      * @return array|null
      */
-    private function getIncludePaths(array $parameters)
+    private function getIncludePaths(array $parameters): ?array
     {
         $paths  = $this->getStringParamOrNull($parameters, self::PARAM_INCLUDE);
         $result = empty($paths) === false ? explode(',', rtrim($paths, ',')) : null;
@@ -89,9 +90,9 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function getFieldSets(array $parameters)
+    private function getFieldSets(array $parameters): ?array
     {
-        $result = null;
+        $result    = null;
         $fieldSets = $this->getParamOrNull($parameters, self::PARAM_FIELDS);
         if (empty($fieldSets) === false && is_array($fieldSets)) {
             foreach ($fieldSets as $type => $fields) {
@@ -114,7 +115,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected function getSortParameters(array $parameters)
+    protected function getSortParameters(array $parameters): ?array
     {
         $sortParams = null;
         $sortParam  = $this->getStringParamOrNull($parameters, self::PARAM_SORT);
@@ -124,7 +125,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
                     $detail = T::t('Parameter ' . self::PARAM_SORT . ' should have valid value specified.');
                     throw new E($this->createInvalidQueryErrors($detail), E::HTTP_CODE_BAD_REQUEST);
                 }
-                $isDesc = $isDesc = ($param[0] === '-');
+                $isDesc    = $isDesc = ($param[0] === '-');
                 $sortField = ltrim($param, '+-');
                 if (empty($sortField) === true) {
                     $detail = T::t('Parameter ' . self::PARAM_SORT . ' should have valid name specified.');
@@ -133,6 +134,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
                 $sortParams[] = $this->factory->createSortParam($sortField, $isDesc === false);
             }
         }
+
         return $sortParams;
     }
 
@@ -141,7 +143,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
      *
      * @return array|null
      */
-    private function getPagingParameters(array $parameters)
+    private function getPagingParameters(array $parameters): ?array
     {
         return $this->getArrayParamOrNull($parameters, self::PARAM_PAGE);
     }
@@ -151,7 +153,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
      *
      * @return array|null
      */
-    private function getFilteringParameters(array $parameters)
+    private function getFilteringParameters(array $parameters): ?array
     {
         return $this->getArrayParamOrNull($parameters, self::PARAM_FILTER);
     }
@@ -161,9 +163,9 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
      *
      * @return array|null
      */
-    private function getUnrecognizedParameters(array $parameters)
+    private function getUnrecognizedParameters(array $parameters): ?array
     {
-        $supported = [
+        $supported    = [
             self::PARAM_INCLUDE => 0,
             self::PARAM_FIELDS  => 0,
             self::PARAM_PAGE    => 0,
@@ -171,18 +173,19 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
             self::PARAM_SORT    => 0,
         ];
         $unrecognized = array_diff_key($parameters, $supported);
+
         return empty($unrecognized) === true ? null : $unrecognized;
     }
 
     /**
-     * @param array $parameters
+     * @param array  $parameters
      * @param string $name
      *
      * @return array|null
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function getArrayParamOrNull(array $parameters, $name)
+    private function getArrayParamOrNull(array $parameters, string $name): ?array
     {
         $value = $this->getParamOrNull($parameters, $name);
 
@@ -195,14 +198,14 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
     }
 
     /**
-     * @param array $parameters
+     * @param array  $parameters
      * @param string $name
      *
      * @return string|null
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function getStringParamOrNull(array $parameters, $name)
+    private function getStringParamOrNull(array $parameters, string $name): ?string
     {
         $value = $this->getParamOrNull($parameters, $name);
 
@@ -220,7 +223,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
      *
      * @return mixed
      */
-    private function getParamOrNull(array $parameters, $name)
+    private function getParamOrNull(array $parameters, string $name)
     {
         return isset($parameters[$name]) === true ? $parameters[$name] : null;
     }
@@ -232,7 +235,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected function createInvalidQueryErrors($detail)
+    protected function createInvalidQueryErrors(string $detail): array
     {
         // NOTE: external libraries might expect this method to exist and have certain signature
         // @see https://github.com/neomerx/json-api/issues/185#issuecomment-329135390
@@ -252,7 +255,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected function createParamErrors($name, $detail)
+    protected function createParamErrors(string $name, string $detail): array
     {
         // NOTE: external libraries might expect this method to exist and have certain signature
         // @see https://github.com/neomerx/json-api/issues/185#issuecomment-329135390

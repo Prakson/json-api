@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Psr\Http\Message\ServerRequestInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -46,7 +46,7 @@ interface QueryParametersParserInterface
      *
      * @return EncodingParametersInterface
      */
-    public function parse(ServerRequestInterface $request);
+    public function parse(ServerRequestInterface $request): EncodingParametersInterface;
 
     /**
      * Parse input parameters from request.
@@ -55,5 +55,5 @@ interface QueryParametersParserInterface
      *
      * @return EncodingParametersInterface
      */
-    public function parseQueryParameters(array $parameters);
+    public function parseQueryParameters(array $parameters): EncodingParametersInterface;
 }

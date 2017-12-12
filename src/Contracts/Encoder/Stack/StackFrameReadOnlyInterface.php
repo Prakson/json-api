@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Schema\ResourceObjectInterface;
-use \Neomerx\JsonApi\Contracts\Schema\RelationshipObjectInterface;
+use Neomerx\JsonApi\Contracts\Schema\RelationshipObjectInterface;
+use Neomerx\JsonApi\Contracts\Schema\ResourceObjectInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -29,26 +29,26 @@ interface StackFrameReadOnlyInterface
      *
      * @return ResourceObjectInterface|null
      */
-    public function getResource();
+    public function getResource(): ?ResourceObjectInterface;
 
     /**
      * Get associated relationship object.
      *
      * @return RelationshipObjectInterface|null
      */
-    public function getRelationship();
+    public function getRelationship(): ?RelationshipObjectInterface;
 
     /**
      * Get frame depth level.
      *
      * @return int
      */
-    public function getLevel();
+    public function getLevel(): int;
 
     /**
      * Get frame path (dot separated link names).
      *
      * @return string|null
      */
-    public function getPath();
+    public function getPath(): ?string;
 }

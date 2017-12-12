@@ -16,8 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Factories\Exceptions;
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -32,7 +31,7 @@ class Link implements LinkInterface
     private $subHref;
 
     /**
-     * @var array|object|null
+     * @var mixed|null
      */
     private $meta;
 
@@ -42,17 +41,14 @@ class Link implements LinkInterface
     private $treatAsHref;
 
     /**
-     * @param string $subHref
-     * @param mixed  $meta
-     * @param bool   $treatAsHref If $subHref is a full URL and must not be concatenated with other URLs.
+     * @param string     $subHref
+     * @param mixed|null $meta
+     * @param bool       $treatAsHref If $subHref is a full URL and must not be concatenated with other URLs.
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function __construct($subHref, $meta = null, $treatAsHref = false)
+    public function __construct(string $subHref, $meta = null, bool $treatAsHref = false)
     {
-        is_string($subHref) === true ?: Exceptions::throwInvalidArgument('subHref', $subHref);
-        is_bool($treatAsHref) === true ?: Exceptions::throwInvalidArgument('treatAsHref', $treatAsHref);
-
         $this->subHref     = $subHref;
         $this->meta        = $meta;
         $this->treatAsHref = $treatAsHref;
@@ -61,7 +57,7 @@ class Link implements LinkInterface
     /**
      * @inheritdoc
      */
-    public function getSubHref()
+    public function getSubHref(): string
     {
         return $this->subHref;
     }
@@ -77,7 +73,7 @@ class Link implements LinkInterface
     /**
      * @inheritdoc
      */
-    public function isTreatAsHref()
+    public function isTreatAsHref(): bool
     {
         return $this->treatAsHref;
     }

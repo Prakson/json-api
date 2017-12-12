@@ -16,25 +16,25 @@
  * limitations under the License.
  */
 
-use \Iterator;
-use \IteratorAggregate;
-use \InvalidArgumentException;
-use \Psr\Log\LoggerAwareTrait;
-use \Psr\Log\LoggerAwareInterface;
-use \Neomerx\JsonApi\Factories\Exceptions;
-use \Neomerx\JsonApi\I18n\Translator as T;
-use \Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Stack\StackInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parser\ParserInterface;
-use \Neomerx\JsonApi\Contracts\Schema\ResourceObjectInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
-use \Neomerx\JsonApi\Contracts\Schema\RelationshipObjectInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parser\ParserReplyInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Stack\StackFactoryInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parser\ParserFactoryInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parser\ParserManagerInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Stack\StackFrameReadOnlyInterface;
+use InvalidArgumentException;
+use Iterator;
+use IteratorAggregate;
+use Neomerx\JsonApi\Contracts\Encoder\Parser\ParserFactoryInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parser\ParserInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parser\ParserManagerInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parser\ParserReplyInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Stack\StackFactoryInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Stack\StackFrameReadOnlyInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Stack\StackInterface;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
+use Neomerx\JsonApi\Contracts\Schema\RelationshipObjectInterface;
+use Neomerx\JsonApi\Contracts\Schema\ResourceObjectInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\Factories\Exceptions;
+use Neomerx\JsonApi\I18n\Translator as T;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
 /**
  * The main purpose of the parser is to reach **every resource** that is targeted for inclusion and its
@@ -124,7 +124,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
     /**
      * @inheritdoc
      */
-    public function parse($data)
+    public function parse($data): iterable
     {
         $this->stack = $this->stackFactory->createStack();
         $rootFrame   = $this->stack->push();
@@ -144,7 +144,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    private function parseData()
+    private function parseData(): iterable
     {
         list($isEmpty, $isOriginallyArrayed, $traversableData) = $this->analyzeCurrentData();
 

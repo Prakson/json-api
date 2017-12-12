@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-use \Closure;
-use \LogicException;
-use \Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
+use Closure;
+use LogicException;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -55,7 +55,7 @@ class IdentitySchema extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getId($resource)
+    public function getId($resource): ?string
     {
         $closure  = $this->identityClosure;
         $identity = $closure($resource);
@@ -66,7 +66,7 @@ class IdentitySchema extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getAttributes($resource)
+    public function getAttributes($resource): ?array
     {
         // this method should not be called
         throw new LogicException();
@@ -75,7 +75,7 @@ class IdentitySchema extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getRelationships($resource, $isPrimary, array $includeRelationships)
+    public function getRelationships($resource, bool $isPrimary, array $includeRelationships): ?array
     {
         // this method should not be called
         throw new LogicException();

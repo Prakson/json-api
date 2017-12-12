@@ -16,12 +16,14 @@
  * limitations under the License.
  */
 
-use \Mockery;
-use \LogicException;
-use \Neomerx\Tests\JsonApi\BaseTestCase;
-use \Neomerx\JsonApi\Schema\IdentitySchema;
-use \Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
+use LogicException;
+use Mockery;
+use Mockery\Mock;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\Schema\IdentitySchema;
+use Neomerx\Tests\JsonApi\BaseTestCase;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -40,16 +42,19 @@ class IdentitySchemaTest extends BaseTestCase
     {
         parent::setUp();
 
+        /** @var Mock $providerMock */
+        $providerMock = Mockery::mock(SchemaProviderInterface::class);
+        $providerMock->shouldReceive('getResourceType')->once()->withAnyArgs()->andReturn('fake-type');
+        $providerMock->shouldReceive('getSelfSubUrl')->once()->withAnyArgs()->andReturn('/fake-sub-url');
+
+        /** @var SchemaProviderInterface $providerMock */
+
         /** @var SchemaFactoryInterface $factory */
         $factory = Mockery::mock(SchemaFactoryInterface::class);
 
+        /** @var Mock $container */
         $container = Mockery::mock(ContainerInterface::class);
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $container->shouldReceive('getSchemaByType')->once()->withAnyArgs()->andReturnSelf();
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $container->shouldReceive('getResourceType')->once()->withAnyArgs()->andReturn('fake-type');
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $container->shouldReceive('getSelfSubUrl')->once()->withAnyArgs()->andReturn('/fake-sub-url');
+        $container->shouldReceive('getSchemaByType')->once()->withAnyArgs()->andReturn($providerMock);
 
         /** @var ContainerInterface $container */
 

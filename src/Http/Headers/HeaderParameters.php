@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\AcceptHeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\AcceptHeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -45,7 +45,7 @@ class HeaderParameters implements HeaderParametersInterface
      * @param AcceptHeaderInterface $accept
      * @param HeaderInterface|null  $contentType
      */
-    public function __construct($method, AcceptHeaderInterface $accept, HeaderInterface $contentType = null)
+    public function __construct(string $method, AcceptHeaderInterface $accept, HeaderInterface $contentType = null)
     {
         $this->accept      = $accept;
         $this->contentType = $contentType;
@@ -55,7 +55,7 @@ class HeaderParameters implements HeaderParametersInterface
     /**
      * @inheritdoc
      */
-    public function getContentTypeHeader()
+    public function getContentTypeHeader(): ?HeaderInterface
     {
         return $this->contentType;
     }
@@ -63,7 +63,7 @@ class HeaderParameters implements HeaderParametersInterface
     /**
      * @inheritdoc
      */
-    public function getAcceptHeader()
+    public function getAcceptHeader(): AcceptHeaderInterface
     {
         return $this->accept;
     }
@@ -71,7 +71,7 @@ class HeaderParameters implements HeaderParametersInterface
     /**
      * @inheritdoc
      */
-    public function getMethod()
+    public function getMethod(): string
     {
         return $this->method;
     }

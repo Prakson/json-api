@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Decoder\DecoderInterface;
+use Neomerx\JsonApi\Contracts\Decoder\DecoderInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -28,7 +28,7 @@ class ObjectDecoder implements DecoderInterface
      *
      * @return object
      */
-    public function decode($content)
+    public function decode(string $content)
     {
         return json_decode($content);
     }

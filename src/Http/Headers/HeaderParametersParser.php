@@ -16,17 +16,18 @@
  * limitations under the License.
  */
 
-use \InvalidArgumentException;
-use \Psr\Log\LoggerAwareTrait;
-use \Psr\Log\LoggerAwareInterface;
-use \Neomerx\JsonApi\Document\Error;
-use \Neomerx\JsonApi\I18n\Translator as T;
-use \Psr\Http\Message\ServerRequestInterface;
-use \Neomerx\JsonApi\Exceptions\JsonApiException as E;
-use \Neomerx\JsonApi\Contracts\Http\HttpFactoryInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersParserInterface;
+use InvalidArgumentException;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersParserInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
+use Neomerx\JsonApi\Contracts\Http\HttpFactoryInterface;
+use Neomerx\JsonApi\Document\Error;
+use Neomerx\JsonApi\Exceptions\JsonApiException as E;
+use Neomerx\JsonApi\I18n\Translator as T;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
 /**
  * @package Neomerx\JsonApi
@@ -54,7 +55,7 @@ class HeaderParametersParser implements HeaderParametersParserInterface, LoggerA
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function parse(ServerRequestInterface $request, $checkContentType = true)
+    public function parse(ServerRequestInterface $request, bool $checkContentType = true): HeaderParametersInterface
     {
         $acceptHeader      = null;
         $contentTypeHeader = null;
@@ -64,8 +65,8 @@ class HeaderParametersParser implements HeaderParametersParserInterface, LoggerA
                 $header            = $this->getHeader($request, HeaderInterface::HEADER_CONTENT_TYPE);
                 $contentTypeHeader = Header::parse($header, HeaderInterface::HEADER_CONTENT_TYPE);
             } catch (InvalidArgumentException $exception) {
-                $title  = T::t('Invalid ' . HeaderInterface::HEADER_CONTENT_TYPE . ' header.');
-                $error  = new Error(null, null, null, null, $title);
+                $title = T::t('Invalid ' . HeaderInterface::HEADER_CONTENT_TYPE . ' header.');
+                $error = new Error(null, null, null, null, $title);
                 E::throwException(new E([$error], E::HTTP_CODE_BAD_REQUEST, $exception));
             }
         }
@@ -74,15 +75,15 @@ class HeaderParametersParser implements HeaderParametersParserInterface, LoggerA
             $header       = $this->getHeader($request, HeaderInterface::HEADER_ACCEPT);
             $acceptHeader = AcceptHeader::parse($header);
         } catch (InvalidArgumentException $exception) {
-            $title  = T::t('Invalid ' . HeaderInterface::HEADER_ACCEPT . ' header.');
-            $error  = new Error(null, null, null, null, $title);
+            $title = T::t('Invalid ' . HeaderInterface::HEADER_ACCEPT . ' header.');
+            $error = new Error(null, null, null, null, $title);
             E::throwException(new E([$error], E::HTTP_CODE_BAD_REQUEST, $exception));
         }
 
         $method = $request->getMethod();
 
         return $checkContentType === true ?
-            $this->factory->createHeaderParameters($method, $acceptHeader, $contentTypeHeader):
+            $this->factory->createHeaderParameters($method, $acceptHeader, $contentTypeHeader) :
             $this->factory->createNoContentHeaderParameters($method, $acceptHeader);
     }
 
@@ -92,7 +93,7 @@ class HeaderParametersParser implements HeaderParametersParserInterface, LoggerA
      *
      * @return string
      */
-    private function getHeader(ServerRequestInterface $request, $name)
+    private function getHeader(ServerRequestInterface $request, string $name): string
     {
         $value = $request->getHeader($name);
         if (empty($value) === false) {

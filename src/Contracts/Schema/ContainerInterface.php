@@ -28,7 +28,7 @@ interface ContainerInterface
      *
      * @return SchemaProviderInterface
      */
-    public function getSchema($resourceObject);
+    public function getSchema($resourceObject): ?SchemaProviderInterface;
 
     /**
      * Get schema provider by resource type.
@@ -37,7 +37,7 @@ interface ContainerInterface
      *
      * @return SchemaProviderInterface
      */
-    public function getSchemaByType($type);
+    public function getSchemaByType(string $type): SchemaProviderInterface;
 
     /**
      * Get schema provider by JSON API type.
@@ -46,5 +46,5 @@ interface ContainerInterface
      *
      * @return SchemaProviderInterface
      */
-    public function getSchemaByResourceType($resourceType);
+    public function getSchemaByResourceType(string $resourceType): SchemaProviderInterface;
 }

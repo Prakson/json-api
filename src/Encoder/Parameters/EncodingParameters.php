@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Factories\Exceptions;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\SortParameterInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\SortParameterInterface;
+use Neomerx\JsonApi\Factories\Exceptions;
 
 /**
  * @package Neomerx\JsonApi
@@ -82,7 +82,7 @@ class EncodingParameters implements EncodingParametersInterface
     /**
      * @inheritdoc
      */
-    public function getIncludePaths()
+    public function getIncludePaths(): ?array
     {
         return $this->includePaths;
     }
@@ -90,7 +90,7 @@ class EncodingParameters implements EncodingParametersInterface
     /**
      * @inheritdoc
      */
-    public function getFieldSets()
+    public function getFieldSets(): ?array
     {
         return $this->fieldSets;
     }
@@ -100,7 +100,7 @@ class EncodingParameters implements EncodingParametersInterface
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function getFieldSet($type)
+    public function getFieldSet(string $type): ?array
     {
         is_string($type) === true ?: Exceptions::throwInvalidArgument('type', $type);
 
@@ -110,7 +110,7 @@ class EncodingParameters implements EncodingParametersInterface
     /**
      * @inheritdoc
      */
-    public function getSortParameters()
+    public function getSortParameters(): ?array
     {
         return $this->sortParameters;
     }
@@ -118,7 +118,7 @@ class EncodingParameters implements EncodingParametersInterface
     /**
      * @inheritdoc
      */
-    public function getPaginationParameters()
+    public function getPaginationParameters(): ?array
     {
         return $this->pagingParameters;
     }
@@ -126,7 +126,7 @@ class EncodingParameters implements EncodingParametersInterface
     /**
      * @inheritdoc
      */
-    public function getFilteringParameters()
+    public function getFilteringParameters(): ?array
     {
         return $this->filteringParameters;
     }
@@ -134,7 +134,7 @@ class EncodingParameters implements EncodingParametersInterface
     /**
      * @inheritdoc
      */
-    public function getUnrecognizedParameters()
+    public function getUnrecognizedParameters(): ?array
     {
         return $this->unrecognizedParams;
     }
@@ -142,7 +142,7 @@ class EncodingParameters implements EncodingParametersInterface
     /**
      * @inheritdoc
      */
-    public function isEmpty()
+    public function isEmpty(): bool
     {
         return
             empty($this->getFieldSets()) === true && empty($this->getIncludePaths()) === true &&

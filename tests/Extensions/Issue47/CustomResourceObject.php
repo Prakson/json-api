@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \InvalidArgumentException;
-use \Neomerx\JsonApi\Schema\ResourceObject;
+use InvalidArgumentException;
+use Neomerx\JsonApi\Schema\ResourceObject;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -27,7 +27,7 @@ class CustomResourceObject extends ResourceObject
     /**
      * @inheritdoc
      */
-    public function getAttributes()
+    public function getAttributes(): ?array
     {
         $filter     = $this->attributeKeysFilter;
         $attributes = $this->schema->getAttributes($this->resource);

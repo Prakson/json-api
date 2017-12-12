@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Encoder\Encoder;
-use \Neomerx\JsonApi\Contracts\Factories\FactoryInterface;
+use Neomerx\JsonApi\Contracts\Factories\FactoryInterface;
+use Neomerx\JsonApi\Encoder\Encoder;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -27,7 +27,7 @@ class CustomEncoder extends Encoder
     /**
      * @return FactoryInterface
      */
-    protected static function createFactory()
+    protected static function createFactory(): FactoryInterface
     {
         return new CustomFactory();
     }

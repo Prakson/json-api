@@ -16,14 +16,17 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Factories\Factory;
-use \Neomerx\Tests\JsonApi\BaseTestCase;
-use \Neomerx\JsonApi\Http\Headers\Header;
-use \Neomerx\JsonApi\Http\Headers\MediaType;
-use \Neomerx\JsonApi\Http\Headers\AcceptHeader;
-use \Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
+use Mockery;
+use Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
+use Neomerx\JsonApi\Contracts\Decoder\DecoderInterface;
+use Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
+use Neomerx\JsonApi\Factories\Factory;
+use Neomerx\JsonApi\Http\Headers\AcceptHeader;
+use Neomerx\JsonApi\Http\Headers\Header;
+use Neomerx\JsonApi\Http\Headers\MediaType;
+use Neomerx\Tests\JsonApi\BaseTestCase;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -51,6 +54,11 @@ class CodecMatcherTest extends BaseTestCase
     private $unregType;
 
     /**
+     * @var array
+     */
+    private $codecMocks = [];
+
+    /**
      * Set up tests.
      */
     protected function setUp()
@@ -59,9 +67,27 @@ class CodecMatcherTest extends BaseTestCase
 
         $this->codecMatcher = (new Factory())->createCodecMatcher();
 
-        $fakeCodec = function ($name) {
-            return function () use ($name) {
-                return $name;
+        $this->codecMocks = [];
+        $mockEncoder      = function (string $name) {
+            $mock = Mockery::mock(EncoderInterface::class);
+
+            /** @var EncoderInterface $mock */
+
+            $this->codecMocks[$name] = $mock;
+
+            return function () use ($mock) : EncoderInterface {
+                return $mock;
+            };
+        };
+        $mockDecoder      = function (string $name) {
+            $mock = Mockery::mock(DecoderInterface::class);
+
+            /** @var DecoderInterface $mock */
+
+            $this->codecMocks[$name] = $mock;
+
+            return function () use ($mock) : DecoderInterface {
+                return $mock;
             };
         };
 
@@ -69,10 +95,10 @@ class CodecMatcherTest extends BaseTestCase
         $this->typeExt1  = new MediaType('type1', 'subtype1', [MediaTypeInterface::PARAM_EXT => 'ext1']);
         $this->unregType = new MediaType('type1', 'subtype1', [MediaTypeInterface::PARAM_EXT => 'ext2']);
 
-        $this->codecMatcher->registerEncoder($this->typeNoExt, $fakeCodec('enc-type1-no-ext'));
-        $this->codecMatcher->registerDecoder($this->typeNoExt, $fakeCodec('dec-type1-no-ext'));
-        $this->codecMatcher->registerEncoder($this->typeExt1, $fakeCodec('enc-type1-ext1'));
-        $this->codecMatcher->registerDecoder($this->typeExt1, $fakeCodec('dec-type1-ext1'));
+        $this->codecMatcher->registerEncoder($this->typeNoExt, $mockEncoder('enc-type1-no-ext'));
+        $this->codecMatcher->registerDecoder($this->typeNoExt, $mockDecoder('dec-type1-no-ext'));
+        $this->codecMatcher->registerEncoder($this->typeExt1, $mockEncoder('enc-type1-ext1'));
+        $this->codecMatcher->registerDecoder($this->typeExt1, $mockDecoder('dec-type1-ext1'));
     }
 
     /**
@@ -80,7 +106,7 @@ class CodecMatcherTest extends BaseTestCase
      */
     public function testMatchNoParams()
     {
-        $acceptHeader = AcceptHeader::parse(
+        $acceptHeader      = AcceptHeader::parse(
             'type1/subtype1;q=1.0, type1/subtype1;ext=ext1;q=0.8, */*;q=0.1'
         );
         $contentTypeHeader = Header::parse('type1/subtype1', HeaderInterface::HEADER_CONTENT_TYPE);
@@ -88,12 +114,12 @@ class CodecMatcherTest extends BaseTestCase
         $this->codecMatcher->matchEncoder($acceptHeader);
         $this->codecMatcher->matchDecoder($contentTypeHeader);
 
-        $this->assertEquals('enc-type1-no-ext', $this->codecMatcher->getEncoder());
+        $this->assertSame($this->codecMocks['enc-type1-no-ext'], $this->codecMatcher->getEncoder());
         $this->assertEquals('type1/subtype1', $this->codecMatcher->getEncoderHeaderMatchedType()->getMediaType());
         $this->assertNull($this->codecMatcher->getEncoderHeaderMatchedType()->getParameters());
         $this->assertSame($this->typeNoExt, $this->codecMatcher->getEncoderRegisteredMatchedType());
 
-        $this->assertEquals('dec-type1-no-ext', $this->codecMatcher->getDecoder());
+        $this->assertSame($this->codecMocks['dec-type1-no-ext'], $this->codecMatcher->getDecoder());
         $this->assertEquals('type1/subtype1', $this->codecMatcher->getDecoderHeaderMatchedType()->getMediaType());
         $this->assertNull($this->codecMatcher->getDecoderHeaderMatchedType()->getParameters());
         $this->assertSame($this->typeNoExt, $this->codecMatcher->getDecoderRegisteredMatchedType());
@@ -104,7 +130,7 @@ class CodecMatcherTest extends BaseTestCase
      */
     public function testMatchWithParams()
     {
-        $acceptHeader = AcceptHeader::parse(
+        $acceptHeader      = AcceptHeader::parse(
             'type1/subtype1;q=0.8, type1/subtype1;ext=ext1;q=1.0, */*;q=0.1'
         );
         $contentTypeHeader = Header::parse('type1/subtype1;ext="ext1"', HeaderInterface::HEADER_CONTENT_TYPE);
@@ -112,12 +138,12 @@ class CodecMatcherTest extends BaseTestCase
         $this->codecMatcher->matchEncoder($acceptHeader);
         $this->codecMatcher->matchDecoder($contentTypeHeader);
 
-        $this->assertEquals('enc-type1-ext1', $this->codecMatcher->getEncoder());
+        $this->assertSame($this->codecMocks['enc-type1-ext1'], $this->codecMatcher->getEncoder());
         $this->assertEquals('type1/subtype1', $this->codecMatcher->getEncoderHeaderMatchedType()->getMediaType());
         $this->assertEquals(['ext' => 'ext1'], $this->codecMatcher->getEncoderHeaderMatchedType()->getParameters());
         $this->assertSame($this->typeExt1, $this->codecMatcher->getEncoderRegisteredMatchedType());
 
-        $this->assertEquals('dec-type1-ext1', $this->codecMatcher->getDecoder());
+        $this->assertSame($this->codecMocks['dec-type1-ext1'], $this->codecMatcher->getDecoder());
         $this->assertEquals('type1/subtype1', $this->codecMatcher->getDecoderHeaderMatchedType()->getMediaType());
         $this->assertEquals(['ext' => 'ext1'], $this->codecMatcher->getDecoderHeaderMatchedType()->getParameters());
         $this->assertSame($this->typeExt1, $this->codecMatcher->getDecoderRegisteredMatchedType());
@@ -128,7 +154,7 @@ class CodecMatcherTest extends BaseTestCase
      */
     public function testNoMatch1()
     {
-        $acceptHeader = AcceptHeader::parse(
+        $acceptHeader      = AcceptHeader::parse(
             'type1-XXX/subtype1;q=0.8, type1-XXX/subtype1;ext=ext1;q=1.0, */*;q=0.1'
         );
         $contentTypeHeader = Header::parse('type1-XXX/subtype1;ext="ext1"', HeaderInterface::HEADER_CONTENT_TYPE);
@@ -136,7 +162,7 @@ class CodecMatcherTest extends BaseTestCase
         $this->codecMatcher->matchEncoder($acceptHeader);
         $this->codecMatcher->matchDecoder($contentTypeHeader);
 
-        $this->assertEquals('enc-type1-no-ext', $this->codecMatcher->getEncoder());
+        $this->assertSame($this->codecMocks['enc-type1-no-ext'], $this->codecMatcher->getEncoder());
         $this->assertEquals('*/*', $this->codecMatcher->getEncoderHeaderMatchedType()->getMediaType());
         $this->assertNull($this->codecMatcher->getEncoderHeaderMatchedType()->getParameters());
         $this->assertSame($this->typeNoExt, $this->codecMatcher->getEncoderRegisteredMatchedType());
@@ -151,7 +177,7 @@ class CodecMatcherTest extends BaseTestCase
      */
     public function testNoMatch2()
     {
-        $acceptHeader = AcceptHeader::parse(
+        $acceptHeader      = AcceptHeader::parse(
             'type1-XXX/subtype1;q=0.8, type1-XXX/subtype1;ext=ext1;q=1.0'
         );
         $contentTypeHeader = Header::parse('type1-XXX/subtype1;ext="ext1"', HeaderInterface::HEADER_CONTENT_TYPE);
@@ -263,36 +289,6 @@ class CodecMatcherTest extends BaseTestCase
 
         $matcher->matchEncoder(AcceptHeader::parse($header));
         $this->assertNull($matcher->getEncoderRegisteredMatchedType());
-    }
-
-    /**
-     * Test encoder.
-     */
-    public function testSetEncoder()
-    {
-        $matcher = $this->getTestCodecMatcher();
-
-        $foo = 'foo';
-        $matcher->setEncoder(function () use ($foo) {
-            return $foo;
-        });
-
-        $this->assertEquals($foo, $matcher->getEncoder());
-    }
-
-    /**
-     * Test decoder.
-     */
-    public function testSetDecoder()
-    {
-        $matcher = $this->getTestCodecMatcher();
-
-        $foo = 'foo';
-        $matcher->setDecoder(function () use ($foo) {
-            return $foo;
-        });
-
-        $this->assertEquals($foo, $matcher->getDecoder());
     }
 
     /**

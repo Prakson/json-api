@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Closure;
-use \Neomerx\JsonApi\Schema\SchemaProvider;
+use Closure;
+use Neomerx\JsonApi\Schema\SchemaProvider;
 
 /**
  * Base schema provider for testing/development purposes. It's not intended to be used in production.
@@ -89,7 +89,7 @@ abstract class DevSchemaProvider extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getResourceLinks($resource)
+    public function getResourceLinks($resource): array
     {
         if (($linksClosure = $this->resourceLinksClosure) === null) {
             return parent::getResourceLinks($resource);
@@ -161,7 +161,7 @@ abstract class DevSchemaProvider extends SchemaProvider
      *
      * @return string[]
      */
-    public function getIncludePaths()
+    public function getIncludePaths(): array
     {
         return empty($this->includePaths) === false ? $this->includePaths : parent::getIncludePaths();
     }

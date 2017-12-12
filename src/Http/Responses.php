@@ -16,15 +16,15 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Exceptions\ErrorCollection;
-use \Neomerx\JsonApi\Contracts\Document\ErrorInterface;
-use \Neomerx\JsonApi\Contracts\Http\ResponsesInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
-use \Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\SupportedExtensionsInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Contracts\Document\ErrorInterface;
+use Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\SupportedExtensionsInterface;
+use Neomerx\JsonApi\Contracts\Http\ResponsesInterface;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
+use Neomerx\JsonApi\Exceptions\ErrorCollection;
 
 /**
  * @package Neomerx\JsonApi
@@ -83,8 +83,8 @@ abstract class Responses implements ResponsesInterface
      */
     public function getContentResponse(
         $data,
-        $statusCode = self::HTTP_OK,
-        $links = null,
+        int $statusCode = self::HTTP_OK,
+        array $links = null,
         $meta = null,
         array $headers = []
     ) {
@@ -99,7 +99,7 @@ abstract class Responses implements ResponsesInterface
     /**
      * @inheritdoc
      */
-    public function getCreatedResponse($resource, $links = null, $meta = null, array $headers = [])
+    public function getCreatedResponse($resource, array $links = null, $meta = null, array $headers = [])
     {
         $encoder = $this->getEncoder();
         $links === null ?: $encoder->withLinks($links);
@@ -113,7 +113,7 @@ abstract class Responses implements ResponsesInterface
     /**
      * @inheritdoc
      */
-    public function getCodeResponse($statusCode, array $headers = [])
+    public function getCodeResponse(int $statusCode, array $headers = [])
     {
         return $this->createJsonApiResponse(null, $statusCode, $headers, false);
     }
@@ -121,7 +121,7 @@ abstract class Responses implements ResponsesInterface
     /**
      * @inheritdoc
      */
-    public function getMetaResponse($meta, $statusCode = self::HTTP_OK, array $headers = [])
+    public function getMetaResponse($meta, int $statusCode = self::HTTP_OK, array $headers = [])
     {
         $encoder = $this->getEncoder();
         $content = $encoder->encodeMeta($meta);
@@ -134,8 +134,8 @@ abstract class Responses implements ResponsesInterface
      */
     public function getIdentifiersResponse(
         $data,
-        $statusCode = self::HTTP_OK,
-        $links = null,
+        int $statusCode = self::HTTP_OK,
+        array $links = null,
         $meta = null,
         array $headers = []
     ) {
@@ -152,7 +152,7 @@ abstract class Responses implements ResponsesInterface
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    public function getErrorResponse($errors, $statusCode = self::HTTP_BAD_REQUEST, array $headers = [])
+    public function getErrorResponse($errors, int $statusCode = self::HTTP_BAD_REQUEST, array $headers = [])
     {
         if ($errors instanceof ErrorCollection || is_array($errors) === true) {
             /** @var ErrorInterface[] $errors */

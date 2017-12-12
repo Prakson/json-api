@@ -26,7 +26,7 @@ interface RelationshipObjectInterface
      *
      * @return string|null
      */
-    public function getName();
+    public function getName(): ?string;
 
     /**
      * Get resource data from relationship.
@@ -40,7 +40,7 @@ interface RelationshipObjectInterface
      *
      * @return array<string,\Neomerx\JsonApi\Contracts\Schema\LinkInterface>
      */
-    public function getLinks();
+    public function getLinks(): array;
 
     /**
      * Get meta.
@@ -54,12 +54,12 @@ interface RelationshipObjectInterface
      *
      * @return bool
      */
-    public function isShowData();
+    public function isShowData(): bool;
 
     /**
      * If relationship is from root (non existing root element).
      *
      * @return bool
      */
-    public function isRoot();
+    public function isRoot(): bool;
 }

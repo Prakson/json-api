@@ -16,21 +16,21 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
-use \Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
-use \Neomerx\JsonApi\Contracts\Http\Query\QueryCheckerInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\AcceptHeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeadersCheckerInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\AcceptMediaTypeInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\SortParameterInterface;
-use \Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\SupportedExtensionsInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersParserInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\ParametersAnalyzerInterface;
+use Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\ParametersAnalyzerInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\SortParameterInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\AcceptHeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\AcceptMediaTypeInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderParametersParserInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeadersCheckerInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\SupportedExtensionsInterface;
+use Neomerx\JsonApi\Contracts\Http\Query\QueryCheckerInterface;
+use Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -45,18 +45,21 @@ interface HttpFactoryInterface
      *
      * @return ParametersAnalyzerInterface
      */
-    public function createParametersAnalyzer(EncodingParametersInterface $parameters, ContainerInterface $container);
+    public function createParametersAnalyzer(
+        EncodingParametersInterface $parameters,
+        ContainerInterface $container
+    ): ParametersAnalyzerInterface;
 
     /**
      * Create media type.
      *
-     * @param string                    $type
-     * @param string                    $subType
+     * @param string $type
+     * @param string $subType
      * @param array<string,string>|null $parameters
      *
      * @return MediaTypeInterface
      */
-    public function createMediaType($type, $subType, $parameters = null);
+    public function createMediaType(string $type, string $subType, array $parameters = null): MediaTypeInterface;
 
     /**
      * Create parameters.
@@ -71,13 +74,13 @@ interface HttpFactoryInterface
      * @return EncodingParametersInterface
      */
     public function createQueryParameters(
-        $includePaths = null,
+        array $includePaths = null,
         array $fieldSets = null,
-        $sortParameters = null,
+        array $sortParameters = null,
         array $pagingParameters = null,
         array $filteringParameters = null,
         array $unrecognizedParams = null
-    );
+    ): EncodingParametersInterface;
 
     /**
      * @param string                $method
@@ -86,7 +89,11 @@ interface HttpFactoryInterface
      *
      * @return HeaderParametersInterface
      */
-    public function createHeaderParameters($method, AcceptHeaderInterface $accept, HeaderInterface $contentType);
+    public function createHeaderParameters(
+        string $method,
+        AcceptHeaderInterface $accept,
+        HeaderInterface $contentType
+    ): HeaderParametersInterface;
 
     /**
      * @param string                $method
@@ -94,21 +101,24 @@ interface HttpFactoryInterface
      *
      * @return HeaderParametersInterface
      */
-    public function createNoContentHeaderParameters($method, AcceptHeaderInterface $accept);
+    public function createNoContentHeaderParameters(
+        string $method,
+        AcceptHeaderInterface $accept
+    ): HeaderParametersInterface;
 
     /**
      * Create parameters parser.
      *
      * @return QueryParametersParserInterface
      */
-    public function createQueryParametersParser();
+    public function createQueryParametersParser(): QueryParametersParserInterface;
 
     /**
      * Create parameters parser.
      *
      * @return HeaderParametersParserInterface
      */
-    public function createHeaderParametersParser();
+    public function createHeaderParametersParser(): HeaderParametersParserInterface;
 
     /**
      * Create sort parameter.
@@ -118,7 +128,7 @@ interface HttpFactoryInterface
      *
      * @return SortParameterInterface
      */
-    public function createSortParam($sortField, $isAscending);
+    public function createSortParam(string $sortField, bool $isAscending): SortParameterInterface;
 
     /**
      * Create supported extensions.
@@ -127,28 +137,30 @@ interface HttpFactoryInterface
      *
      * @return SupportedExtensionsInterface
      */
-    public function createSupportedExtensions($extensions = MediaTypeInterface::NO_EXT);
+    public function createSupportedExtensions(
+        string $extensions = MediaTypeInterface::NO_EXT
+    ): SupportedExtensionsInterface;
 
     /**
      * Create media type for Accept HTTP header.
      *
-     * @param int                       $position
-     * @param string                    $type
-     * @param string                    $subType
+     * @param int    $position
+     * @param string $type
+     * @param string $subType
      * @param array<string,string>|null $parameters
-     * @param float                     $quality
+     * @param float  $quality
      * @param array<string,string>|null $extensions
      *
      * @return AcceptMediaTypeInterface
      */
     public function createAcceptMediaType(
-        $position,
-        $type,
-        $subType,
-        $parameters = null,
-        $quality = 1.0,
-        $extensions = null
-    );
+        int $position,
+        string $type,
+        string $subType,
+        array $parameters = null,
+        float $quality = 1.0,
+        array $extensions = null
+    ): AcceptMediaTypeInterface;
 
     /**
      * Create Accept HTTP header.
@@ -157,7 +169,7 @@ interface HttpFactoryInterface
      *
      * @return AcceptHeaderInterface
      */
-    public function createAcceptHeader($unsortedMediaTypes);
+    public function createAcceptHeader(array $unsortedMediaTypes): AcceptHeaderInterface;
 
     /**
      * Create header parameters checker.
@@ -166,7 +178,7 @@ interface HttpFactoryInterface
      *
      * @return HeadersCheckerInterface
      */
-    public function createHeadersChecker(CodecMatcherInterface $codecMatcher);
+    public function createHeadersChecker(CodecMatcherInterface $codecMatcher): HeadersCheckerInterface;
 
     /**
      * Create query parameters checker.
@@ -183,11 +195,11 @@ interface HttpFactoryInterface
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function createQueryChecker(
-        $allowUnrecognized = false,
+        bool $allowUnrecognized = false,
         array $includePaths = null,
         array $fieldSetTypes = null,
         array $sortParameters = null,
         array $pagingParameters = null,
         array $filteringParameters = null
-    );
+    ): QueryCheckerInterface;
 }

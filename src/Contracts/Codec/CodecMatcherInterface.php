@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-use \Closure;
-use \Neomerx\JsonApi\Contracts\Decoder\DecoderInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\AcceptHeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\AcceptMediaTypeInterface;
+use Closure;
+use Neomerx\JsonApi\Contracts\Decoder\DecoderInterface;
+use Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\AcceptHeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\AcceptMediaTypeInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -37,7 +37,7 @@ interface CodecMatcherInterface
      *
      * @return void
      */
-    public function registerEncoder(MediaTypeInterface $mediaType, Closure $encoderClosure);
+    public function registerEncoder(MediaTypeInterface $mediaType, Closure $encoderClosure): void;
 
     /**
      * Register decoder.
@@ -47,14 +47,14 @@ interface CodecMatcherInterface
      *
      * @return void
      */
-    public function registerDecoder(MediaTypeInterface $mediaType, Closure $decoderClosure);
+    public function registerDecoder(MediaTypeInterface $mediaType, Closure $decoderClosure): void;
 
     /**
      * Get encoder.
      *
      * @return EncoderInterface|null
      */
-    public function getEncoder();
+    public function getEncoder(): ?EncoderInterface;
 
     /**
      * Set encoder.
@@ -63,23 +63,23 @@ interface CodecMatcherInterface
      *
      * @return void
      */
-    public function setEncoder($encoder);
+    public function setEncoder($encoder): void;
 
     /**
      * Get decoder.
      *
      * @return DecoderInterface|null
      */
-    public function getDecoder();
+    public function getDecoder(): ?DecoderInterface;
 
     /**
      * Set decoder.
      *
      * @param DecoderInterface|Closure $decoder
      *
-     * @return DecoderInterface
+     * @return void
      */
-    public function setDecoder($decoder);
+    public function setDecoder($decoder): void;
 
     /**
      * Find best encoder match for 'Accept' header.
@@ -88,7 +88,7 @@ interface CodecMatcherInterface
      *
      * @return void
      */
-    public function matchEncoder(AcceptHeaderInterface $acceptHeader);
+    public function matchEncoder(AcceptHeaderInterface $acceptHeader): void;
 
     /**
      * Find best decoder match for 'Content-Type' header.
@@ -97,33 +97,33 @@ interface CodecMatcherInterface
      *
      * @return void
      */
-    public function matchDecoder(HeaderInterface $contentTypeHeader);
+    public function matchDecoder(HeaderInterface $contentTypeHeader): void;
 
     /**
      * Get media type from 'Accept' header that matched to one of the registered encoder media types.
      *
      * @return AcceptMediaTypeInterface|null
      */
-    public function getEncoderHeaderMatchedType();
+    public function getEncoderHeaderMatchedType(): ?AcceptMediaTypeInterface;
 
     /**
      * Get media type that was registered for matched encoder.
      *
      * @return MediaTypeInterface|null
      */
-    public function getEncoderRegisteredMatchedType();
+    public function getEncoderRegisteredMatchedType(): ?MediaTypeInterface;
 
     /**
      * Get media type from 'Content-Type' header that matched to one of the registered decoder media types.
      *
      * @return MediaTypeInterface|null
      */
-    public function getDecoderHeaderMatchedType();
+    public function getDecoderHeaderMatchedType(): ?MediaTypeInterface;
 
     /**
      * Get media type that was registered for matched decoder.
      *
      * @return MediaTypeInterface|null
      */
-    public function getDecoderRegisteredMatchedType();
+    public function getDecoderRegisteredMatchedType(): ?MediaTypeInterface;
 }

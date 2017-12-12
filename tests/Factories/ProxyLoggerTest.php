@@ -16,10 +16,11 @@
  * limitations under the License.
  */
 
-use \Mockery;
-use \Psr\Log\LoggerInterface;
-use \Neomerx\Tests\JsonApi\BaseTestCase;
-use \Neomerx\JsonApi\Factories\ProxyLogger;
+use Mockery;
+use Mockery\Mock;
+use Neomerx\JsonApi\Factories\ProxyLogger;
+use Neomerx\Tests\JsonApi\BaseTestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -33,11 +34,11 @@ class ProxyLoggerTest extends BaseTestCase
     {
         $logger = new ProxyLogger();
 
+        /** @var Mock $logMock */
         $this->assertNotNull($logMock = Mockery::mock(LoggerInterface::class));
 
         $logger->debug('Nothing hapens. Should not fail.');
 
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
         $logMock->shouldReceive('log')->once()->withAnyArgs()->andReturnUndefined();
 
         /** @var LoggerInterface $logMock */

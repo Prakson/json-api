@@ -44,28 +44,28 @@ interface MediaTypeInterface
      *
      * @return string
      */
-    public function getType();
+    public function getType(): string;
 
     /**
      * Get media subtype.
      *
      * @return string
      */
-    public function getSubType();
+    public function getSubType(): string;
 
     /**
      * Get full media type (type/subtype).
      *
      * @return string
      */
-    public function getMediaType();
+    public function getMediaType(): string;
 
     /**
      * Get media type parameters.
      *
      * @return array<string,string>|null
      */
-    public function getParameters();
+    public function getParameters(): ?array;
 
     /**
      * Compare media types.
@@ -74,7 +74,7 @@ interface MediaTypeInterface
      *
      * @return bool
      */
-    public function matchesTo(MediaTypeInterface $mediaType);
+    public function matchesTo(MediaTypeInterface $mediaType): bool;
 
     /**
      * Compare media types.
@@ -83,5 +83,5 @@ interface MediaTypeInterface
      *
      * @return bool
      */
-    public function equalsTo(MediaTypeInterface $mediaType);
+    public function equalsTo(MediaTypeInterface $mediaType): bool;
 }

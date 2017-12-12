@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-use \LogicException;
-use \Neomerx\JsonApi\Schema\SchemaProvider;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
+use LogicException;
+use Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
+use Neomerx\JsonApi\Schema\SchemaProvider;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -49,7 +49,7 @@ class EmptySchema extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getId($resource)
+    public function getId($resource): ?string
     {
         throw new LogicException();
     }
@@ -57,7 +57,7 @@ class EmptySchema extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getAttributes($resource)
+    public function getAttributes($resource): ?array
     {
         throw new LogicException();
     }

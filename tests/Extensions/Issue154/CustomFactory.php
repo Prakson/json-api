@@ -16,9 +16,10 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Factories\Factory;
-use \Neomerx\JsonApi\Encoder\EncoderOptions;
-use \Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
+use Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
+use Neomerx\JsonApi\Encoder\EncoderOptions;
+use Neomerx\JsonApi\Factories\Factory;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -28,7 +29,7 @@ class CustomFactory extends Factory
     /**
      * @inheritdoc
      */
-    public function createContainer(array $providers = [])
+    public function createContainer(array $providers = []): ContainerInterface
     {
         return new CustomContainer($this, $providers);
     }
@@ -36,8 +37,10 @@ class CustomFactory extends Factory
     /**
      * @inheritdoc
      */
-    public function createEncoder(ContainerInterface $container, EncoderOptions $encoderOptions = null)
-    {
+    public function createEncoder(
+        ContainerInterface $container,
+        EncoderOptions $encoderOptions = null
+    ): EncoderInterface {
         return new CustomEncoder($this, $container, $encoderOptions);
     }
 }

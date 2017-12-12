@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -31,7 +31,7 @@ class CommentSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getId($comment)
+    public function getId($comment): ?string
     {
         return $comment->{Comment::ATTRIBUTE_ID};
     }
@@ -39,7 +39,7 @@ class CommentSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getAttributes($comment)
+    public function getAttributes($comment): ?array
     {
         return [
             Comment::ATTRIBUTE_BODY => $comment->{Comment::ATTRIBUTE_BODY},
@@ -49,7 +49,7 @@ class CommentSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getRelationships($comment, $isPrimary, array $includeRelationships)
+    public function getRelationships($comment, bool $isPrimary, array $includeRelationships): ?array
     {
         assert($comment instanceof Comment);
 
@@ -86,7 +86,7 @@ class CommentSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getIncludedResourceLinks($resource)
+    public function getIncludedResourceLinks($resource): array
     {
         $links = [
             LinkInterface::SELF => $this->getSelfSubLink($resource),

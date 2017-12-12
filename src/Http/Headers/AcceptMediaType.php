@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \InvalidArgumentException;
-use \Neomerx\JsonApi\Contracts\Http\Headers\AcceptMediaTypeInterface;
+use InvalidArgumentException;
+use Neomerx\JsonApi\Contracts\Http\Headers\AcceptMediaTypeInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -40,29 +40,31 @@ class AcceptMediaType extends MediaType implements AcceptMediaTypeInterface
     private $position;
 
     /**
-     * @param int                       $position
-     * @param string                    $type
-     * @param string                    $subType
+     * @param int    $position
+     * @param string $type
+     * @param string $subType
      * @param array<string,string>|null $parameters
-     * @param float                     $quality
+     * @param float  $quality
      * @param array<string,string>|null $extensions
      */
-    public function __construct($position, $type, $subType, $parameters = null, $quality = 1.0, $extensions = null)
-    {
+    public function __construct(
+        int $position,
+        string $type,
+        string $subType,
+        array $parameters = null,
+        float $quality = 1.0,
+        array $extensions = null
+    ) {
         parent::__construct($type, $subType, $parameters);
 
-        if (is_int($position) === false || $position < 0) {
+        if ($position < 0) {
             throw new InvalidArgumentException('position');
         }
 
         // rfc2616: 3 digits are meaningful (#3.9 Quality Values)
-        $quality = floor((float)$quality * 1000) / 1000;
+        $quality = floor($quality * 1000) / 1000;
         if ($quality < 0 || $quality > 1) {
             throw new InvalidArgumentException('quality');
-        }
-
-        if ($extensions !== null && is_array($extensions) === false) {
-            throw new InvalidArgumentException('extensions');
         }
 
         $this->position   = $position;
@@ -73,7 +75,7 @@ class AcceptMediaType extends MediaType implements AcceptMediaTypeInterface
     /**
      * @inheritdoc
      */
-    public function getPosition()
+    public function getPosition(): int
     {
         return $this->position;
     }
@@ -81,7 +83,7 @@ class AcceptMediaType extends MediaType implements AcceptMediaTypeInterface
     /**
      * @inheritdoc
      */
-    public function getQuality()
+    public function getQuality(): float
     {
         return $this->quality;
     }
@@ -89,7 +91,7 @@ class AcceptMediaType extends MediaType implements AcceptMediaTypeInterface
     /**
      * @inheritdoc
      */
-    public function getExtensions()
+    public function getExtensions(): ?array
     {
         return $this->extensions;
     }
@@ -99,7 +101,7 @@ class AcceptMediaType extends MediaType implements AcceptMediaTypeInterface
      *
      * @return AcceptMediaTypeInterface
      */
-    public static function parse($position, $mediaType)
+    public static function parse(int $position, string $mediaType)
     {
         $fields = explode(';', $mediaType);
 

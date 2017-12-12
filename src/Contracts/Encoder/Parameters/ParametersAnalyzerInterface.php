@@ -26,27 +26,27 @@ interface ParametersAnalyzerInterface
      *
      * @return EncodingParametersInterface
      */
-    public function getParameters();
+    public function getParameters(): EncodingParametersInterface;
 
     /**
      * If path is included.
      *
-     * @param string $path
-     * @param string $type
+     * @param string|null $path
+     * @param string      $type
      *
      * @return bool
      */
-    public function isPathIncluded($path, $type);
+    public function isPathIncluded(?string $path, string $type): bool;
 
     /**
      * Get a list of relationship that should be included for $path of root type $type.
      *
-     * @param string $path
-     * @param string $type
+     * @param string|null $path
+     * @param string      $type
      *
      * @return string[]
      */
-    public function getIncludeRelationships($path, $type);
+    public function getIncludeRelationships(?string $path, string $type): array;
 
     /**
      * If field-sets allows any fields to be in output (field-set filter is not empty array).
@@ -55,5 +55,5 @@ interface ParametersAnalyzerInterface
      *
      * @return bool
      */
-    public function hasSomeFields($type);
+    public function hasSomeFields(string $type): bool;
 }

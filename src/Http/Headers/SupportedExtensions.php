@@ -16,9 +16,8 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Factories\Exceptions;
-use \Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\SupportedExtensionsInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\SupportedExtensionsInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -33,7 +32,7 @@ class SupportedExtensions implements SupportedExtensionsInterface
     /**
      * @param string $extensions
      */
-    public function __construct($extensions = MediaTypeInterface::NO_EXT)
+    public function __construct(string $extensions = MediaTypeInterface::NO_EXT)
     {
         $this->setExtensions($extensions);
     }
@@ -43,17 +42,15 @@ class SupportedExtensions implements SupportedExtensionsInterface
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function setExtensions($extensions)
+    public function setExtensions(string $extensions): void
     {
-        is_string($extensions) === true ?: Exceptions::throwInvalidArgument('extensions', $extensions);
-
         $this->extensions = $extensions;
     }
 
     /**
      * @inheritdoc
      */
-    public function getExtensions()
+    public function getExtensions(): string
     {
         return $this->extensions;
     }

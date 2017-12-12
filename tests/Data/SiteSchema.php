@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -46,7 +46,7 @@ class SiteSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getId($site)
+    public function getId($site): ?string
     {
         return $site->{Site::ATTRIBUTE_ID};
     }
@@ -54,7 +54,7 @@ class SiteSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getAttributes($site)
+    public function getAttributes($site): array
     {
         assert($site instanceof Site);
 
@@ -66,7 +66,7 @@ class SiteSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getRelationships($site, $isPrimary, array $includeRelationships)
+    public function getRelationships($site, bool $isPrimary, array $includeRelationships): ?array
     {
         assert($site instanceof Site);
 

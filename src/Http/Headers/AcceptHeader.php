@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-use \Closure;
-use \InvalidArgumentException;
-use \Neomerx\JsonApi\Contracts\Http\Headers\AcceptHeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\AcceptMediaTypeInterface;
+use Closure;
+use InvalidArgumentException;
+use Neomerx\JsonApi\Contracts\Http\Headers\AcceptHeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\AcceptMediaTypeInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -34,7 +34,7 @@ class AcceptHeader extends Header implements AcceptHeaderInterface
     public function __construct($unsortedMediaTypes)
     {
 
-        if (is_array($unsortedMediaTypes) ===  false) {
+        if (is_array($unsortedMediaTypes) === false) {
             throw new InvalidArgumentException('unsortedMediaTypes');
         }
 
@@ -48,7 +48,7 @@ class AcceptHeader extends Header implements AcceptHeaderInterface
      *
      * @return AcceptHeaderInterface
      */
-    public static function parse($header, $accept = self::HEADER_ACCEPT)
+    public static function parse(string $header, string $accept = self::HEADER_ACCEPT)
     {
         /** @var AcceptHeaderInterface $result */
         $result = parent::parse($header, self::HEADER_ACCEPT);

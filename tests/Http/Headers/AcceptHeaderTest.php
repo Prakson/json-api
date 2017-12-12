@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-use \Neomerx\Tests\JsonApi\BaseTestCase;
-use \Neomerx\JsonApi\Http\Headers\AcceptHeader;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
+use Neomerx\JsonApi\Http\Headers\AcceptHeader;
+use Neomerx\Tests\JsonApi\BaseTestCase;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -168,21 +168,13 @@ class AcceptHeaderTest extends BaseTestCase
      */
     public function testInvalidHeader1()
     {
-        AcceptHeader::parse(null);
-    }
-
-    /**
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidHeader2()
-    {
         AcceptHeader::parse('');
     }
 
     /**
      * @expectedException \InvalidArgumentException
      */
-    public function testInvalidHeader3()
+    public function testInvalidHeader2()
     {
         AcceptHeader::parse('foo/bar; baz');
     }

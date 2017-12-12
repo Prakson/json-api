@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Decoder\DecoderInterface;
+use Neomerx\JsonApi\Contracts\Decoder\DecoderInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -28,7 +28,7 @@ class RawDecoder implements DecoderInterface
      *
      * @return string
      */
-    public function decode($content)
+    public function decode(string $content): string
     {
         return $content;
     }

@@ -16,21 +16,22 @@
  * limitations under the License.
  */
 
-use \Mockery;
-use \stdClass;
-use \Mockery\MockInterface;
-use \Neomerx\JsonApi\Document\Error;
-use \Neomerx\JsonApi\Http\Responses;
-use \Neomerx\Tests\JsonApi\BaseTestCase;
-use \Neomerx\JsonApi\Http\Headers\MediaType;
-use \Neomerx\JsonApi\Exceptions\ErrorCollection;
-use \Neomerx\JsonApi\Http\Headers\SupportedExtensions;
-use \Neomerx\JsonApi\Contracts\Http\ResponsesInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\SupportedExtensionsInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Mockery;
+use Mockery\MockInterface;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\SupportedExtensionsInterface;
+use Neomerx\JsonApi\Contracts\Http\ResponsesInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\Document\Error;
+use Neomerx\JsonApi\Exceptions\ErrorCollection;
+use Neomerx\JsonApi\Http\Headers\MediaType;
+use Neomerx\JsonApi\Http\Headers\SupportedExtensions;
+use Neomerx\JsonApi\Http\Responses;
+use Neomerx\Tests\JsonApi\BaseTestCase;
+use stdClass;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -385,19 +386,17 @@ class ResponsesTest extends BaseTestCase
      */
     private function willBeCreatedResourceLocationUrl($resource, $prefix, $subUrl)
     {
+        $linkMock = Mockery::mock(LinkInterface::class);
+
         $containerMock = Mockery::mock(SchemaProviderInterface::class);
 
         /** @noinspection PhpMethodParametersCountMismatchInspection */
         $this->mock->shouldReceive('getSchemaContainer')->once()->withNoArgs()->andReturn($containerMock);
 
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
         $containerMock->shouldReceive('getSchema')->once()->with($resource)->andReturnSelf();
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $containerMock->shouldReceive('getSelfSubLink')->once()->with($resource)->andReturnSelf();
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $containerMock->shouldReceive('getSubHref')->once()->withNoArgs()->andReturn($subUrl);
+        $containerMock->shouldReceive('getSelfSubLink')->once()->with($resource)->andReturn($linkMock);
+        $linkMock->shouldReceive('getSubHref')->once()->withNoArgs()->andReturn($subUrl);
 
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
         $this->mock->shouldReceive('getUrlPrefix')->once()->withNoArgs()->andReturn($prefix);
     }
 

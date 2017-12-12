@@ -26,5 +26,5 @@ interface AcceptHeaderInterface extends HeaderInterface
      *
      * @return AcceptMediaTypeInterface[]
      */
-    public function getMediaTypes();
+    public function getMediaTypes(): array;
 }

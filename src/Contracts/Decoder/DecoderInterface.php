@@ -28,5 +28,5 @@ interface DecoderInterface
      *
      * @return mixed
      */
-    public function decode($content);
+    public function decode(string $content);
 }

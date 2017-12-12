@@ -16,15 +16,15 @@
  * limitations under the License.
  */
 
-use \Closure;
-use \InvalidArgumentException;
-use \Psr\Log\LoggerAwareTrait;
-use \Psr\Log\LoggerAwareInterface;
-use \Neomerx\JsonApi\Factories\Exceptions;
-use \Neomerx\JsonApi\I18n\Translator as T;
-use \Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Closure;
+use InvalidArgumentException;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\Factories\Exceptions;
+use Neomerx\JsonApi\I18n\Translator as T;
+use Psr\Log\LoggerAwareInterface;
+use Psr\Log\LoggerAwareTrait;
 
 /**
  * @package Neomerx\JsonApi
@@ -74,7 +74,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    public function register($type, $schema)
+    public function register(string $type, $schema): void
     {
         // Type must be non-empty string
         $isOk = (is_string($type) === true && empty($type) === false);
@@ -127,7 +127,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
     /**
      * @inheritdoc
      */
-    public function getSchema($resource)
+    public function getSchema($resource): ?SchemaProviderInterface
     {
         if ($resource === null) {
             return null;
@@ -144,7 +144,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    public function getSchemaByType($type)
+    public function getSchemaByType(string $type): SchemaProviderInterface
     {
         is_string($type) === true ?: Exceptions::throwInvalidArgument('type', $type);
 
@@ -178,7 +178,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    public function getSchemaByResourceType($resourceType)
+    public function getSchemaByResourceType(string $resourceType): SchemaProviderInterface
     {
         // Schema is not found among instantiated schemas for resource type $resourceType
         $isOk = (is_string($resourceType) === true && $this->hasResourceToJsonTypeMapping($resourceType) === true);
@@ -210,7 +210,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
     /**
      * @return SchemaFactoryInterface
      */
-    protected function getFactory()
+    protected function getFactory(): SchemaFactoryInterface
     {
         return $this->factory;
     }
@@ -218,7 +218,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
     /**
      * @return array
      */
-    protected function getProviderMappings()
+    protected function getProviderMappings(): array
     {
         return $this->providerMapping;
     }
@@ -228,7 +228,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return bool
      */
-    protected function hasProviderMapping($type)
+    protected function hasProviderMapping($type): bool
     {
         return array_key_exists($type, $this->providerMapping);
     }
@@ -238,7 +238,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return mixed
      */
-    protected function getProviderMapping($type)
+    protected function getProviderMapping(string $type)
     {
         return $this->providerMapping[$type];
     }
@@ -249,7 +249,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return void
      */
-    protected function setProviderMapping($type, $schema)
+    protected function setProviderMapping(string $type, $schema): void
     {
         $this->providerMapping[$type] = $schema;
     }
@@ -259,7 +259,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return bool
      */
-    protected function hasCreatedProvider($type)
+    protected function hasCreatedProvider(string $type): bool
     {
         return array_key_exists($type, $this->createdProviders);
     }
@@ -269,7 +269,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return SchemaProviderInterface
      */
-    protected function getCreatedProvider($type)
+    protected function getCreatedProvider(string $type): SchemaProviderInterface
     {
         return $this->createdProviders[$type];
     }
@@ -280,7 +280,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return void
      */
-    protected function setCreatedProvider($type, SchemaProviderInterface $provider)
+    protected function setCreatedProvider(string $type, SchemaProviderInterface $provider): void
     {
         $this->createdProviders[$type] = $provider;
     }
@@ -290,7 +290,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return bool
      */
-    protected function hasResourceToJsonTypeMapping($resourceType)
+    protected function hasResourceToJsonTypeMapping(string $resourceType): bool
     {
         return array_key_exists($resourceType, $this->resType2JsonType);
     }
@@ -300,7 +300,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return string
      */
-    protected function getJsonType($resourceType)
+    protected function getJsonType(string $resourceType): string
     {
         return $this->resType2JsonType[$resourceType];
     }
@@ -311,7 +311,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return void
      */
-    protected function setResourceToJsonTypeMapping($resourceType, $jsonType)
+    protected function setResourceToJsonTypeMapping(string $resourceType, string $jsonType): void
     {
         $this->resType2JsonType[$resourceType] = $jsonType;
     }
@@ -321,7 +321,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return string
      */
-    protected function getResourceType($resource)
+    protected function getResourceType($resource): string
     {
         return get_class($resource);
     }
@@ -332,7 +332,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return SchemaProviderInterface
      */
-    protected function createSchemaFromClosure(Closure $closure)
+    protected function createSchemaFromClosure(Closure $closure): SchemaProviderInterface
     {
         $schema = $closure($this->getFactory());
 
@@ -357,7 +357,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return SchemaProviderInterface
      */
-    protected function createSchemaFromClassName($className)
+    protected function createSchemaFromClassName(string $className): SchemaProviderInterface
     {
         $schema = new $className($this->getFactory());
 

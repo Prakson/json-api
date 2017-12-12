@@ -16,12 +16,14 @@
  * limitations under the License.
  */
 
-use \Mockery;
-use \Neomerx\Tests\JsonApi\BaseTestCase;
-use \Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
-use \Neomerx\JsonApi\Contracts\Factories\FactoryInterface;
-use \Neomerx\JsonApi\Schema\ResourceIdentifierSchemaAdapter;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Mockery;
+use Mockery\Mock;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Factories\FactoryInterface;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\Schema\ResourceIdentifierSchemaAdapter;
+use Neomerx\Tests\JsonApi\BaseTestCase;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -30,26 +32,21 @@ class ResourceIdentifierSchemaAdapterTest extends BaseTestCase
 {
     public function testAdapter()
     {
+        $linkMock1 = Mockery::mock(LinkInterface::class);
+        $linkMock2 = Mockery::mock(LinkInterface::class);
+        $linkMock3 = Mockery::mock(LinkInterface::class);
+        $linkMock4 = Mockery::mock(LinkInterface::class);
+
         $factory = Mockery::mock(FactoryInterface::class);
+        /** @var Mock $schema */
         $schema  = Mockery::mock(SchemaProviderInterface::class);
 
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $schema->shouldReceive('getSelfSubLink')->once()->withAnyArgs()->andReturn('/sublink');
-
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $schema->shouldReceive('getSelfSubUrl')->once()->withAnyArgs()->andReturn('/suburl/');
-
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
+        $schema->shouldReceive('getSelfSubLink')->once()->withAnyArgs()->andReturn($linkMock1);
+        $schema->shouldReceive('getSelfSubUrl')->once()->withAnyArgs()->andReturn($linkMock2);
         $schema->shouldReceive('getLinkageMeta')->once()->withAnyArgs()->andReturn(['some' => 'meta']);
-
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
         $schema->shouldReceive('getPrimaryMeta')->once()->withAnyArgs()->andReturn(['some' => 'meta']);
-
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $schema->shouldReceive('getRelationshipSelfLink')->once()->withAnyArgs()->andReturn('whatever');
-
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $schema->shouldReceive('getRelationshipRelatedLink')->once()->withAnyArgs()->andReturn('whatever');
+        $schema->shouldReceive('getRelationshipSelfLink')->once()->withAnyArgs()->andReturn($linkMock3);
+        $schema->shouldReceive('getRelationshipRelatedLink')->once()->withAnyArgs()->andReturn($linkMock4);
 
         /** @var FactoryInterface $factory */
         /** @var ContainerInterface $container */
@@ -66,7 +63,6 @@ class ResourceIdentifierSchemaAdapterTest extends BaseTestCase
         $this->assertEmpty($adapter->getIncludePaths());
         $this->assertNotEmpty($adapter->getPrimaryMeta($resource));
         $this->assertFalse($adapter->isShowAttributesInIncluded());
-        $this->assertFalse($adapter->isShowRelationshipsInIncluded());
         $this->assertNull($adapter->getInclusionMeta($resource));
         $this->assertNotNull($adapter->getRelationshipObjectIterator($resource, true, []));
         $this->assertNull($adapter->getRelationshipsPrimaryMeta($resource));

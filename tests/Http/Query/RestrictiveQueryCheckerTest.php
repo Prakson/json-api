@@ -16,15 +16,15 @@
  * limitations under the License.
  */
 
-use \Mockery;
-use \Mockery\MockInterface;
-use \Neomerx\JsonApi\Factories\Factory;
-use \Neomerx\Tests\JsonApi\BaseTestCase;
-use \Psr\Http\Message\ServerRequestInterface;
-use \Neomerx\JsonApi\Exceptions\JsonApiException;
-use \Neomerx\JsonApi\Contracts\Document\ErrorInterface;
-use \Neomerx\JsonApi\Contracts\Http\Query\QueryCheckerInterface;
-use \Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface;
+use Mockery;
+use Mockery\Mock;
+use Neomerx\JsonApi\Contracts\Document\ErrorInterface;
+use Neomerx\JsonApi\Contracts\Http\Query\QueryCheckerInterface;
+use Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface;
+use Neomerx\JsonApi\Exceptions\JsonApiException;
+use Neomerx\JsonApi\Factories\Factory;
+use Neomerx\Tests\JsonApi\BaseTestCase;
+use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -48,7 +48,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
     ];
 
     /**
-     * @var MockInterface
+     * @var Mock
      */
     private $mockRequest;
 
@@ -99,7 +99,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
      */
     public function testNotAllowedInputPaths()
     {
-        $checker = $this->getChecker(
+        $checker    = $this->getChecker(
             false,
             ['author', 'comments']
         );
@@ -287,7 +287,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
     public function testNotAllowedSortParams()
     {
         $allowedSortParams = ['created', 'name']; // in input will be 'title' which is not on the list
-        $checker = $this->getChecker(
+        $checker           = $this->getChecker(
             false,
             null,
             null,
@@ -352,14 +352,13 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
     }
 
     /**
-     * @param array  $input
+     * @param array $input
      *
      * @return ServerRequestInterface
      */
     private function prepareRequest(array $input)
     {
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $this->mockRequest->shouldReceive('getQueryParams')->withNoArgs()->once()->andReturn($input);
+        $this->mockRequest->shouldReceive('getQueryParams')->withArgs([])->once()->andReturn($input);
 
         /** @var ServerRequestInterface $request */
         $request = $this->mockRequest;

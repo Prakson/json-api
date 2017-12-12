@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\I18n\TranslatorInterface;
+use Neomerx\JsonApi\Contracts\I18n\TranslatorInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -31,7 +31,7 @@ class Translator implements TranslatorInterface
     /**
      * @return TranslatorInterface
      */
-    public static function getTranslator()
+    public static function getTranslator(): TranslatorInterface
     {
         if (self::$translator === null) {
             self::$translator = new static;
@@ -43,7 +43,7 @@ class Translator implements TranslatorInterface
     /**
      * @param TranslatorInterface $translator
      */
-    public static function setTranslator(TranslatorInterface $translator)
+    public static function setTranslator(TranslatorInterface $translator): void
     {
         self::$translator = $translator;
     }
@@ -54,7 +54,7 @@ class Translator implements TranslatorInterface
      *
      * @return string
      */
-    public function translate($format, array $parameters = [])
+    public function translate(string $format, array $parameters = []): string
     {
         $result = empty($parameters) === false ? vsprintf($format, $parameters) : $format;
 
@@ -69,7 +69,7 @@ class Translator implements TranslatorInterface
      *
      * @SuppressWarnings(PHPMD.ShortMethodName)
      */
-    public static function t($format, array $parameters = [])
+    public static function t(string $format, array $parameters = []): string
     {
         return static::getTranslator()->translate($format, $parameters);
     }

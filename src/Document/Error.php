@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Factories\Exceptions;
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
-use \Neomerx\JsonApi\Contracts\Document\ErrorInterface;
-use \Neomerx\JsonApi\Contracts\Document\DocumentInterface;
+use Neomerx\JsonApi\Contracts\Document\DocumentInterface;
+use Neomerx\JsonApi\Contracts\Document\ErrorInterface;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Factories\Exceptions;
 
 /**
  * @package Neomerx\JsonApi
@@ -71,8 +71,8 @@ class Error implements ErrorInterface
     /**
      * @param int|string|null    $idx
      * @param LinkInterface|null $aboutLink
-     * @param int|string|null    $status
-     * @param int|string|null    $code
+     * @param string|null        $status
+     * @param string|null        $code
      * @param string|null        $title
      * @param string|null        $detail
      * @param array|null         $source
@@ -81,27 +81,23 @@ class Error implements ErrorInterface
     public function __construct(
         $idx = null,
         LinkInterface $aboutLink = null,
-        $status = null,
-        $code = null,
-        $title = null,
-        $detail = null,
+        string $status = null,
+        string $code = null,
+        string $title = null,
+        string $detail = null,
         array $source = null,
         $meta = null
     ) {
         $this->checkIdx($idx);
-        $this->checkCode($code);
-        $this->checkTitle($title);
-        $this->checkStatus($status);
-        $this->checkDetail($detail);
 
-        $this->idx     = $idx;
-        $this->links   = ($aboutLink === null ? null : [DocumentInterface::KEYWORD_ERRORS_ABOUT => $aboutLink]);
-        $this->status  = ($status !== null ? (string)$status : null);
-        $this->code    = ($code !== null ? (string)$code : null);
-        $this->title   = $title;
-        $this->source  = $source;
-        $this->detail  = $detail;
-        $this->meta    = $meta;
+        $this->idx    = $idx;
+        $this->links  = ($aboutLink === null ? null : [DocumentInterface::KEYWORD_ERRORS_ABOUT => $aboutLink]);
+        $this->status = ($status !== null ? (string)$status : null);
+        $this->code   = ($code !== null ? (string)$code : null);
+        $this->title  = $title;
+        $this->source = $source;
+        $this->detail = $detail;
+        $this->meta   = $meta;
     }
 
     /**
@@ -115,7 +111,7 @@ class Error implements ErrorInterface
     /**
      * @inheritdoc
      */
-    public function getLinks()
+    public function getLinks(): ?array
     {
         return $this->links;
     }
@@ -123,7 +119,7 @@ class Error implements ErrorInterface
     /**
      * @inheritdoc
      */
-    public function getStatus()
+    public function getStatus(): ?string
     {
         return $this->status;
     }
@@ -131,7 +127,7 @@ class Error implements ErrorInterface
     /**
      * @inheritdoc
      */
-    public function getCode()
+    public function getCode(): ?string
     {
         return $this->code;
     }
@@ -139,7 +135,7 @@ class Error implements ErrorInterface
     /**
      * @inheritdoc
      */
-    public function getTitle()
+    public function getTitle(): ?string
     {
         return $this->title;
     }
@@ -147,7 +143,7 @@ class Error implements ErrorInterface
     /**
      * @inheritdoc
      */
-    public function getDetail()
+    public function getDetail(): ?string
     {
         return $this->detail;
     }
@@ -155,7 +151,7 @@ class Error implements ErrorInterface
     /**
      * @inheritdoc
      */
-    public function getSource()
+    public function getSource(): ?array
     {
         return $this->source;
     }
@@ -175,39 +171,5 @@ class Error implements ErrorInterface
     {
         ($idx === null || is_int($idx) === true ||
             is_string($idx) === true) ?: Exceptions::throwInvalidArgument('idx', $idx);
-    }
-
-    /**
-     * @param string|null $title
-     */
-    private function checkTitle($title)
-    {
-        ($title === null || is_string($title) === true) ?: Exceptions::throwInvalidArgument('title', $title);
-    }
-
-    /**
-     * @param string|null $detail
-     */
-    private function checkDetail($detail)
-    {
-        ($detail === null || is_string($detail) === true) ?: Exceptions::throwInvalidArgument('detail', $detail);
-    }
-
-    /**
-     * @param int|string|null $status
-     */
-    private function checkStatus($status)
-    {
-        $isOk = ($status === null || is_int($status) === true || is_string($status) === true);
-        $isOk ?: Exceptions::throwInvalidArgument('status', $status);
-    }
-
-    /**
-     * @param int|string|null $code
-     */
-    private function checkCode($code)
-    {
-        $isOk = ($code === null || is_int($code) === true || is_string($code) === true);
-        $isOk ?: Exceptions::throwInvalidArgument('code', $code);
     }
 }

@@ -16,13 +16,14 @@
  * limitations under the License.
  */
 
-use \Mockery;
-use \stdClass;
-use \Neomerx\JsonApi\Factories\Factory;
-use \Neomerx\Tests\JsonApi\BaseTestCase;
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Mockery;
+use Mockery\Mock;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\Factories\Factory;
+use Neomerx\Tests\JsonApi\BaseTestCase;
+use stdClass;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -56,12 +57,12 @@ class FactoryTest extends BaseTestCase
      */
     public function testCreateResourceObject()
     {
-        $schema = Mockery::mock(SchemaProviderInterface::class);
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $schema->shouldReceive('getResourceType')->once()->andReturn('some-type');
+        $linkMock = Mockery::mock(LinkInterface::class);
 
-        /** @noinspection PhpMethodParametersCountMismatchInspection */
-        $schema->shouldReceive('getSelfSubLink')->once()->andReturn('whatever');
+        /** @var Mock $schema */
+        $schema = Mockery::mock(SchemaProviderInterface::class);
+        $schema->shouldReceive('getResourceType')->once()->andReturn('some-type');
+        $schema->shouldReceive('getSelfSubLink')->once()->andReturn($linkMock);
 
         /** @var SchemaProviderInterface $schema */
 
@@ -74,7 +75,7 @@ class FactoryTest extends BaseTestCase
 
         $this->assertEquals($isInArray, $resource->isInArray());
         $this->assertSame('some-type', $resource->getType());
-        $this->assertEquals('whatever', $resource->getSelfSubLink());
+        $this->assertSame($linkMock, $resource->getSelfSubLink());
     }
 
     /**

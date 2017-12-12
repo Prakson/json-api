@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\I18n\Translator as T;
-use \Neomerx\JsonApi\Exceptions\ErrorCollection;
-use \Neomerx\JsonApi\Exceptions\JsonApiException as E;
-use \Neomerx\JsonApi\Contracts\Http\Query\QueryCheckerInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\SortParameterInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
-use \Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface as QP;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\SortParameterInterface;
+use Neomerx\JsonApi\Contracts\Http\Query\QueryCheckerInterface;
+use Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface as QP;
+use Neomerx\JsonApi\Exceptions\ErrorCollection;
+use Neomerx\JsonApi\Exceptions\JsonApiException as E;
+use Neomerx\JsonApi\I18n\Translator as T;
 
 /**
  * @package Neomerx\JsonApi
@@ -70,7 +70,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
     public function __construct(
-        $allowUnrecognized = true,
+        bool $allowUnrecognized = true,
         array $includePaths = null,
         array $fieldSetTypes = null,
         array $sortParameters = null,
@@ -90,7 +90,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function checkQuery(EncodingParametersInterface $parameters)
+    public function checkQuery(EncodingParametersInterface $parameters): void
     {
         $errors = new ErrorCollection();
 
@@ -110,7 +110,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected function checkIncludePaths(ErrorCollection $errors, EncodingParametersInterface $parameters)
+    protected function checkIncludePaths(ErrorCollection $errors, EncodingParametersInterface $parameters): void
     {
         $withinAllowed = $this->valuesWithinAllowed($parameters->getIncludePaths(), $this->includePaths);
         $withinAllowed === true ?: $errors->addQueryParameterError(QP::PARAM_INCLUDE, T::t(
@@ -124,7 +124,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected function checkFieldSets(ErrorCollection $errors, EncodingParametersInterface $parameters)
+    protected function checkFieldSets(ErrorCollection $errors, EncodingParametersInterface $parameters): void
     {
         $withinAllowed = $this->isFieldsAllowed($parameters->getFieldSets());
         $withinAllowed === true ?: $errors->addQueryParameterError(QP::PARAM_FIELDS, T::t(
@@ -138,7 +138,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected function checkFiltering(ErrorCollection $errors, EncodingParametersInterface $parameters)
+    protected function checkFiltering(ErrorCollection $errors, EncodingParametersInterface $parameters): void
     {
         $withinAllowed = $this->keysWithinAllowed($parameters->getFilteringParameters(), $this->filteringParameters);
         $withinAllowed === true ?: $errors->addQueryParameterError(QP::PARAM_FILTER, T::t(
@@ -152,7 +152,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected function checkSorting(ErrorCollection $errors, EncodingParametersInterface $parameters)
+    protected function checkSorting(ErrorCollection $errors, EncodingParametersInterface $parameters): void
     {
         if ($parameters->getSortParameters() !== null && $this->sortParameters !== null) {
             foreach ($parameters->getSortParameters() as $sortParameter) {
@@ -173,7 +173,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected function checkPaging(ErrorCollection $errors, EncodingParametersInterface $parameters)
+    protected function checkPaging(ErrorCollection $errors, EncodingParametersInterface $parameters): void
     {
         $withinAllowed = $this->keysWithinAllowed($parameters->getPaginationParameters(), $this->pagingParameters);
         $withinAllowed === true ?: $errors->addQueryParameterError(QP::PARAM_PAGE, T::t(
@@ -188,7 +188,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
-    protected function checkUnrecognized(ErrorCollection $errors, EncodingParametersInterface $parameters)
+    protected function checkUnrecognized(ErrorCollection $errors, EncodingParametersInterface $parameters): void
     {
         if ($this->allowUnrecognized === false && empty($parameters->getUnrecognizedParameters()) === false) {
             foreach ($parameters->getUnrecognizedParameters() as $name => $value) {
@@ -203,7 +203,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      *
      * @return bool
      */
-    private function keysWithinAllowed(array $toCheck = null, array $allowed = null)
+    private function keysWithinAllowed(array $toCheck = null, array $allowed = null): bool
     {
         return $toCheck === null || $allowed === null || empty(array_diff_key($toCheck, $allowed));
     }
@@ -214,7 +214,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      *
      * @return bool
      */
-    private function valuesWithinAllowed(array $toCheck = null, array $allowed = null)
+    private function valuesWithinAllowed(array $toCheck = null, array $allowed = null): bool
     {
         return $toCheck === null || $allowed === null || empty(array_diff($toCheck, $allowed));
     }
@@ -224,7 +224,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      *
      * @return array|null
      */
-    private function flip(array $array = null)
+    private function flip(array $array = null): ?array
     {
         return $array === null ? null : array_flip($array);
     }
@@ -236,7 +236,7 @@ class RestrictiveQueryChecker implements QueryCheckerInterface
      *
      * @return bool
      */
-    private function isFieldsAllowed(array $fields = null)
+    private function isFieldsAllowed(array $fields = null): bool
     {
         if ($this->fieldSetTypes === null || $fields === null) {
             return true;

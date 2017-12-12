@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -31,7 +31,7 @@ class PostSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getId($post)
+    public function getId($post): ?string
     {
         return $post->{Post::ATTRIBUTE_ID};
     }
@@ -39,7 +39,7 @@ class PostSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getAttributes($post)
+    public function getAttributes($post): ?array
     {
         assert($post instanceof Post);
 
@@ -52,14 +52,14 @@ class PostSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getRelationships($post, $isPrimary, array $includeRelationships)
+    public function getRelationships($post, bool $isPrimary, array $includeRelationships): ?array
     {
         assert($post instanceof Post);
 
         if (($isPrimary && $this->isIsLinksInPrimary()) || (!$isPrimary && $this->isIsLinksInIncluded())) {
             $authorSelfLink   = $this->getRelationshipSelfLink($post, Post::LINK_AUTHOR);
             $commentsSelfLink = $this->getRelationshipSelfLink($post, Post::LINK_COMMENTS);
-            $links    = [
+            $links            = [
                 Post::LINK_AUTHOR   =>
                     [self::LINKS => [LinkInterface::SELF => $authorSelfLink], self::SHOW_DATA => false],
                 Post::LINK_COMMENTS =>

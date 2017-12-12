@@ -16,13 +16,14 @@
  * limitations under the License.
  */
 
-use \InvalidArgumentException;
-use \Neomerx\JsonApi\I18n\Translator as T;
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
-use \Neomerx\JsonApi\Contracts\Document\DocumentInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
-use \Neomerx\JsonApi\Contracts\Schema\RelationshipObjectInterface;
+use InvalidArgumentException;
+use Neomerx\JsonApi\Contracts\Document\DocumentInterface;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Schema\RelationshipObjectInterface;
+use Neomerx\JsonApi\Contracts\Schema\ResourceObjectInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaFactoryInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\I18n\Translator as T;
 
 /**
  * @package Neomerx\JsonApi
@@ -103,7 +104,7 @@ abstract class SchemaProvider implements SchemaProviderInterface
     /**
      * @inheritdoc
      */
-    public function getResourceType()
+    public function getResourceType(): string
     {
         return $this->resourceType;
     }
@@ -111,7 +112,7 @@ abstract class SchemaProvider implements SchemaProviderInterface
     /**
      * @inheritdoc
      */
-    public function getSelfSubUrl($resource = null)
+    public function getSelfSubUrl($resource = null): string
     {
         return $resource === null ? $this->selfSubUrl : $this->selfSubUrl . '/' . $this->getId($resource);
     }
@@ -119,7 +120,7 @@ abstract class SchemaProvider implements SchemaProviderInterface
     /**
      * @inheritdoc
      */
-    public function getSelfSubLink($resource)
+    public function getSelfSubLink($resource): LinkInterface
     {
         return $this->createLink($this->getSelfSubUrl($resource));
     }
@@ -129,8 +130,12 @@ abstract class SchemaProvider implements SchemaProviderInterface
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function getRelationshipSelfLink($resource, $name, $meta = null, $treatAsHref = false)
-    {
+    public function getRelationshipSelfLink(
+        $resource,
+        string $name,
+        $meta = null,
+        bool $treatAsHref = false
+    ): LinkInterface {
         $link = $this->createLink($this->getRelationshipSelfUrl($resource, $name), $meta, $treatAsHref);
 
         return $link;
@@ -141,8 +146,12 @@ abstract class SchemaProvider implements SchemaProviderInterface
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function getRelationshipRelatedLink($resource, $name, $meta = null, $treatAsHref = false)
-    {
+    public function getRelationshipRelatedLink(
+        $resource,
+        string $name,
+        $meta = null,
+        bool $treatAsHref = false
+    ): LinkInterface {
         $link = $this->createLink($this->getRelationshipRelatedUrl($resource, $name), $meta, $treatAsHref);
 
         return $link;
@@ -191,7 +200,7 @@ abstract class SchemaProvider implements SchemaProviderInterface
     /**
      * @inheritdoc
      */
-    public function isShowAttributesInIncluded()
+    public function isShowAttributesInIncluded(): bool
     {
         return $this->isShowAttributesInIncluded;
     }
@@ -205,7 +214,7 @@ abstract class SchemaProvider implements SchemaProviderInterface
      *
      * @return array
      */
-    public function getRelationships($resource, $isPrimary, array $includeRelationships)
+    public function getRelationships($resource, bool $isPrimary, array $includeRelationships): ?array
     {
         $resource && $isPrimary && $includeRelationships ?: null;
 
@@ -215,15 +224,18 @@ abstract class SchemaProvider implements SchemaProviderInterface
     /**
      * @inheritdoc
      */
-    public function createResourceObject($resource, $isOriginallyArrayed, $attributeKeysFilter = null)
-    {
+    public function createResourceObject(
+        $resource,
+        bool $isOriginallyArrayed,
+        array $attributeKeysFilter = null
+    ): ResourceObjectInterface {
         return $this->factory->createResourceObject($this, $resource, $isOriginallyArrayed, $attributeKeysFilter);
     }
 
     /**
      * @inheritdoc
      */
-    public function getRelationshipObjectIterator($resource, $isPrimary, array $includeRelationships)
+    public function getRelationshipObjectIterator($resource, bool $isPrimary, array $includeRelationships): iterable
     {
         foreach ($this->getRelationships($resource, $isPrimary, $includeRelationships) as $name => $desc) {
             yield $this->createRelationshipObject($resource, $name, $desc);
@@ -233,7 +245,7 @@ abstract class SchemaProvider implements SchemaProviderInterface
     /**
      * @inheritdoc
      */
-    public function getIncludePaths()
+    public function getIncludePaths(): array
     {
         return [];
     }
@@ -241,7 +253,7 @@ abstract class SchemaProvider implements SchemaProviderInterface
     /**
      * @inheritdoc
      */
-    public function getResourceLinks($resource)
+    public function getResourceLinks($resource): array
     {
         $links = [
             LinkInterface::SELF => $this->getSelfSubLink($resource),
@@ -253,7 +265,7 @@ abstract class SchemaProvider implements SchemaProviderInterface
     /**
      * @inheritdoc
      */
-    public function getIncludedResourceLinks($resource)
+    public function getIncludedResourceLinks($resource): array
     {
         return [];
     }

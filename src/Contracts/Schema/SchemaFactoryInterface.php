@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Closure;
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Closure;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -31,7 +31,7 @@ interface SchemaFactoryInterface
      *
      * @return ContainerInterface
      */
-    public function createContainer(array $providers = []);
+    public function createContainer(array $providers = []): ContainerInterface;
 
     /**
      * Create adapter for schema provider container that returns 'resource identifiers' schemes.
@@ -55,25 +55,32 @@ interface SchemaFactoryInterface
     public function createResourceObject(
         SchemaProviderInterface $schema,
         $resource,
-        $isInArray,
-        $attributeKeysFilter = null
-    );
+        bool $isInArray,
+        array $attributeKeysFilter = null
+    ): ResourceObjectInterface;
 
     /**
      * Create relationship object.
      *
-     * @param string                                                        $name
-     * @param object|array|null                                             $data
+     * @param string|null       $name
+     * @param object|array|null $data
      * @param array<string,\Neomerx\JsonApi\Contracts\Schema\LinkInterface> $links
-     * @param mixed                                                         $meta
-     * @param bool                                                          $isShowData
-     * @param bool                                                          $isRoot
+     * @param mixed             $meta
+     * @param bool              $isShowData
+     * @param bool              $isRoot
      *
      * @return RelationshipObjectInterface
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function createRelationshipObject($name, $data, $links, $meta, $isShowData, $isRoot);
+    public function createRelationshipObject(
+        ?string $name,
+        $data,
+        array $links,
+        $meta,
+        bool $isShowData,
+        bool $isRoot
+    ): RelationshipObjectInterface;
 
     /**
      * Create link.
@@ -86,7 +93,7 @@ interface SchemaFactoryInterface
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    public function createLink($subHref, $meta = null, $treatAsHref = false);
+    public function createLink(string $subHref, $meta = null, bool $treatAsHref = false): LinkInterface;
 
     /**
      * Create an adapter for schema that will provide data to encode them as resource identifiers.
@@ -95,7 +102,7 @@ interface SchemaFactoryInterface
      *
      * @return SchemaProviderInterface
      */
-    public function createResourceIdentifierSchemaAdapter(SchemaProviderInterface $schema);
+    public function createResourceIdentifierSchemaAdapter(SchemaProviderInterface $schema): SchemaProviderInterface;
 
     /**
      * Create schema for identity objects.
@@ -106,5 +113,9 @@ interface SchemaFactoryInterface
      *
      * @return SchemaProviderInterface
      */
-    public function createIdentitySchema(ContainerInterface $container, $classType, Closure $identityClosure);
+    public function createIdentitySchema(
+        ContainerInterface $container,
+        string $classType,
+        Closure $identityClosure
+    ): SchemaProviderInterface;
 }

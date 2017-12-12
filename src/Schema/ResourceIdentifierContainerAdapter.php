@@ -16,9 +16,9 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
-use \Neomerx\JsonApi\Contracts\Factories\FactoryInterface;
-use \Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
+use Neomerx\JsonApi\Contracts\Factories\FactoryInterface;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
+use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -50,7 +50,7 @@ class ResourceIdentifierContainerAdapter implements ContainerInterface
     /**
      * @inheritdoc
      */
-    public function getSchema($resourceObject)
+    public function getSchema($resourceObject): SchemaProviderInterface
     {
         return $this->getSchemaAdapter($this->container->getSchema($resourceObject));
     }
@@ -58,7 +58,7 @@ class ResourceIdentifierContainerAdapter implements ContainerInterface
     /**
      * @inheritdoc
      */
-    public function getSchemaByType($type)
+    public function getSchemaByType(string $type): SchemaProviderInterface
     {
         return $this->getSchemaAdapter($this->container->getSchemaByType($type));
     }
@@ -66,7 +66,7 @@ class ResourceIdentifierContainerAdapter implements ContainerInterface
     /**
      * @inheritdoc
      */
-    public function getSchemaByResourceType($resourceType)
+    public function getSchemaByResourceType(string $resourceType): SchemaProviderInterface
     {
         return $this->getSchemaAdapter($this->container->getSchemaByResourceType($resourceType));
     }
@@ -76,7 +76,7 @@ class ResourceIdentifierContainerAdapter implements ContainerInterface
      *
      * @return SchemaProviderInterface
      */
-    protected function getSchemaAdapter(SchemaProviderInterface $schema)
+    protected function getSchemaAdapter(SchemaProviderInterface $schema): SchemaProviderInterface
     {
         return $this->factory->createResourceIdentifierSchemaAdapter($schema);
     }

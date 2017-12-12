@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -31,7 +31,7 @@ class AuthorSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getId($author)
+    public function getId($author): ?string
     {
         return $author->{Author::ATTRIBUTE_ID};
     }
@@ -39,7 +39,7 @@ class AuthorSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getAttributes($author)
+    public function getAttributes($author): ?array
     {
         return [
             Author::ATTRIBUTE_FIRST_NAME => $author->{Author::ATTRIBUTE_FIRST_NAME},
@@ -50,7 +50,7 @@ class AuthorSchema extends DevSchemaProvider
     /**
      * @inheritdoc
      */
-    public function getRelationships($author, $isPrimary, array $includeRelationships)
+    public function getRelationships($author, bool $isPrimary, array $includeRelationships): ?array
     {
         assert($author instanceof Author);
 

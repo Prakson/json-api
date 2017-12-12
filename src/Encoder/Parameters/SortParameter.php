@@ -16,8 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Factories\Exceptions;
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\SortParameterInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\SortParameterInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -37,14 +36,9 @@ class SortParameter implements SortParameterInterface
     /**
      * @param string $sortField
      * @param bool   $isAscending
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function __construct($sortField, $isAscending)
+    public function __construct(string $sortField, bool $isAscending)
     {
-        is_string($sortField) === true ?: Exceptions::throwInvalidArgument('sortField', $sortField);
-        is_bool($isAscending) === true ?: Exceptions::throwInvalidArgument('isAscending', $isAscending);
-
         $this->sortField   = $sortField;
         $this->isAscending = $isAscending;
     }
@@ -62,7 +56,7 @@ class SortParameter implements SortParameterInterface
     /**
      * @inheritdoc
      */
-    public function getField()
+    public function getField(): string
     {
         return $this->sortField;
     }
@@ -70,7 +64,7 @@ class SortParameter implements SortParameterInterface
     /**
      * @inheritdoc
      */
-    public function isAscending()
+    public function isAscending(): bool
     {
         return $this->isAscending;
     }
@@ -78,7 +72,7 @@ class SortParameter implements SortParameterInterface
     /**
      * @inheritdoc
      */
-    public function isDescending()
+    public function isDescending(): bool
     {
         return !$this->isAscending;
     }

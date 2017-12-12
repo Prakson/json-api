@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -28,5 +28,5 @@ interface QueryCheckerInterface
      *
      * @return void
      */
-    public function checkQuery(EncodingParametersInterface $parameters);
+    public function checkQuery(EncodingParametersInterface $parameters): void;
 }

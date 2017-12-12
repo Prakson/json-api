@@ -28,5 +28,5 @@ interface ParserReplyHandlerInterface
      *
      * @return void
      */
-    public function handle(ParserReplyInterface $reply);
+    public function handle(ParserReplyInterface $reply): void;
 }

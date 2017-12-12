@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Countable;
-use \IteratorAggregate;
+use Countable;
+use IteratorAggregate;
 
 /**
  * @package Neomerx\JsonApi
@@ -29,19 +29,19 @@ interface StackReadOnlyInterface extends IteratorAggregate, Countable
      *
      * @return StackFrameReadOnlyInterface|null
      */
-    public function root();
+    public function root(): ?StackFrameReadOnlyInterface;
 
     /**
      * Get a stack frame from end.
      *
      * @return StackFrameReadOnlyInterface|null
      */
-    public function end();
+    public function end(): ?StackFrameReadOnlyInterface;
 
     /**
      * Get a penult stack frame.
      *
      * @return StackFrameReadOnlyInterface|null
      */
-    public function penult();
+    public function penult(): ?StackFrameReadOnlyInterface;
 }

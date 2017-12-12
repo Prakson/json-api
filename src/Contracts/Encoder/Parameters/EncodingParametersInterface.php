@@ -1,6 +1,6 @@
 <?php namespace Neomerx\JsonApi\Contracts\Encoder\Parameters;
 
-    /**
+/**
  * Copyright 2015-2017 info@neomerx.com
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,14 +26,14 @@ interface EncodingParametersInterface
      *
      * @return array|null
      */
-    public function getIncludePaths();
+    public function getIncludePaths(): ?array;
 
     /**
      * Get field names that should be in result.
      *
      * @return array|null
      */
-    public function getFieldSets();
+    public function getFieldSets(): ?array;
 
     /**
      * Get field names that should be in result.
@@ -42,14 +42,14 @@ interface EncodingParametersInterface
      *
      * @return string[]|null
      */
-    public function getFieldSet($type);
+    public function getFieldSet(string $type): ?array;
 
     /**
      * Get sort parameters.
      *
      * @return SortParameterInterface[]|null
      */
-    public function getSortParameters();
+    public function getSortParameters(): ?array;
 
     /**
      * Get pagination parameters.
@@ -59,7 +59,7 @@ interface EncodingParametersInterface
      *
      * @return array|null
      */
-    public function getPaginationParameters();
+    public function getPaginationParameters(): ?array;
 
     /**
      * Get filtering parameters.
@@ -69,19 +69,19 @@ interface EncodingParametersInterface
      *
      * @return array|null
      */
-    public function getFilteringParameters();
+    public function getFilteringParameters(): ?array;
 
     /**
      * Get top level parameters that have not been recognized by parser.
      *
      * @return array|null
      */
-    public function getUnrecognizedParameters();
+    public function getUnrecognizedParameters(): ?array;
 
     /**
      * Returns true if inclusion, field set, sorting, paging, and filtering parameters are empty.
      *
      * @return bool
      */
-    public function isEmpty();
+    public function isEmpty(): bool;
 }

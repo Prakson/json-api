@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -28,21 +28,21 @@ interface ResourceObjectInterface
      *
      * @return string
      */
-    public function getType();
+    public function getType(): string;
 
     /**
      * Get resource ID.
      *
      * @return string|null
      */
-    public function getId();
+    public function getId(): ? string;
 
     /**
      * Get resource attributes.
      *
-     * @return array
+     * @return array|null
      */
-    public function getAttributes();
+    public function getAttributes(): ?array;
 
     /**
      * Get meta-information about resource object.
@@ -84,33 +84,33 @@ interface ResourceObjectInterface
      *
      * @return LinkInterface
      */
-    public function getSelfSubLink();
+    public function getSelfSubLink(): LinkInterface;
 
     /**
      * Get links related to resource.
      *
      * @return array
      */
-    public function getResourceLinks();
+    public function getResourceLinks(): array;
 
     /**
      * Get links related to resource when it is in 'included' section.
      *
      * @return array
      */
-    public function getIncludedResourceLinks();
+    public function getIncludedResourceLinks(): array;
 
     /**
      * If resource attributes should be shown when the resource is within 'included'.
      *
      * @return bool
      */
-    public function isShowAttributesInIncluded();
+    public function isShowAttributesInIncluded(): bool;
 
     /**
      * If original data we part of an array of elements.
      *
      * @return bool
      */
-    public function isInArray();
+    public function isInArray(): bool;
 }

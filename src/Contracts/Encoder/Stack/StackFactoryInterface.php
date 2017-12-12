@@ -28,12 +28,12 @@ interface StackFactoryInterface
      *
      * @return StackFrameInterface
      */
-    public function createFrame(StackFrameReadOnlyInterface $previous = null);
+    public function createFrame(StackFrameReadOnlyInterface $previous = null): StackFrameInterface;
 
     /**
      * Create stack.
      *
      * @return StackInterface
      */
-    public function createStack();
+    public function createStack(): StackInterface;
 }

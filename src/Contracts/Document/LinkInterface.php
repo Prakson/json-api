@@ -41,12 +41,12 @@ interface LinkInterface
      *
      * @return string
      */
-    public function getSubHref();
+    public function getSubHref(): string ;
 
     /**
      * Get meta information.
      *
-     * @return array|object|null
+     * @return mixed|null
      */
     public function getMeta();
 
@@ -55,5 +55,5 @@ interface LinkInterface
      *
      * @return bool
      */
-    public function isTreatAsHref();
+    public function isTreatAsHref(): bool;
 }

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Schema\SchemaProvider;
+use Neomerx\JsonApi\Schema\SchemaProvider;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -31,7 +31,7 @@ class UserSchema extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getId($user)
+    public function getId($user): ?string
     {
         /** @var User $user */
         return $user->identity;
@@ -40,7 +40,7 @@ class UserSchema extends SchemaProvider
     /**
      * @inheritdoc
      */
-    public function getAttributes($user)
+    public function getAttributes($user): ?array
     {
         /** @var User $user */
         return [

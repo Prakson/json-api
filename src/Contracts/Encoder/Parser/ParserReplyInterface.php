@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Encoder\Stack\StackReadOnlyInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Stack\StackReadOnlyInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -37,12 +37,12 @@ interface ParserReplyInterface
      *
      * @return int
      */
-    public function getReplyType();
+    public function getReplyType(): int;
 
     /**
      * Get stack for parse reply.
      *
      * @return StackReadOnlyInterface
      */
-    public function getStack();
+    public function getStack(): StackReadOnlyInterface;
 }

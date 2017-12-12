@@ -16,24 +16,37 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Schema\SchemaProvider;
+use Neomerx\JsonApi\Schema\SchemaProvider;
+use Neomerx\Samples\JsonApi\Models\Comment;
 
 /**
  * @package Neomerx\Samples\JsonApi
  */
 class CommentSchema extends SchemaProvider
 {
+    /**
+     * @inheritdoc
+     */
     protected $resourceType = 'comments';
 
+    /**
+     * @inheritdoc
+     */
     protected $isShowSelfInIncluded = true;
 
-    public function getId($comment)
+    /**
+     * @inheritdoc
+     */
+    public function getId($comment): ?string
     {
         /** @var Comment $comment */
         return $comment->commentId;
     }
 
-    public function getAttributes($comment)
+    /**
+     * @inheritdoc
+     */
+    public function getAttributes($comment): ?array
     {
         /** @var Comment $comment */
         return [
@@ -41,7 +54,10 @@ class CommentSchema extends SchemaProvider
         ];
     }
 
-    public function getRelationships($comment, $isPrimary, array $includeList)
+    /**
+     * @inheritdoc
+     */
+    public function getRelationships($comment, bool $isPrimary, array $includeList): ?array
     {
         /** @var Comment $comment */
         return [

@@ -37,19 +37,19 @@ interface AcceptMediaTypeInterface extends MediaTypeInterface
      *
      * @return float Quality factor [0 .. 1]
      */
-    public function getQuality();
+    public function getQuality(): float;
 
     /**
      * Get media type extension parameters.
      *
      * @return array<string,string>|null
      */
-    public function getExtensions();
+    public function getExtensions(): ?array;
 
     /**
      * Get initial position of the media type in header (needed for stable sorting).
      *
      * @return int
      */
-    public function getPosition();
+    public function getPosition(): int;
 }

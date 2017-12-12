@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Neomerx\Tests\JsonApi\BaseTestCase;
-use \Neomerx\JsonApi\Http\Headers\MediaType;
+use Neomerx\JsonApi\Http\Headers\MediaType;
+use Neomerx\Tests\JsonApi\BaseTestCase;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -31,7 +31,7 @@ class MediaTypeTest extends BaseTestCase
      */
     public function testInvalidConstructorParams1()
     {
-        new MediaType(null, 'subtype');
+        new MediaType('', 'subtype');
     }
 
     /**
@@ -41,7 +41,7 @@ class MediaTypeTest extends BaseTestCase
      */
     public function testInvalidConstructorParams2()
     {
-        new MediaType('type', null);
+        new MediaType('type', '');
     }
 
     /**
@@ -69,12 +69,12 @@ class MediaTypeTest extends BaseTestCase
      */
     public function testCompareMediaTypes()
     {
-        $type1 = MediaType::parse(null, 'text/html;charset=utf-8');
-        $type2 = MediaType::parse(null, 'Text/HTML; Charset="utf-8"');
-        $type3 = MediaType::parse(null, 'text/plain;charset=utf-8');
-        $type4 = MediaType::parse(null, 'text/html;otherParam=utf-8');
-        $type5 = MediaType::parse(null, 'text/html;charset=UTF-8');
-        $type6 = MediaType::parse(null, 'text/html;charset=UTF-8;oneMore=param');
+        $type1 = MediaType::parse(0, 'text/html;charset=utf-8');
+        $type2 = MediaType::parse(0, 'Text/HTML; Charset="utf-8"');
+        $type3 = MediaType::parse(0, 'text/plain;charset=utf-8');
+        $type4 = MediaType::parse(0, 'text/html;otherParam=utf-8');
+        $type5 = MediaType::parse(0, 'text/html;charset=UTF-8');
+        $type6 = MediaType::parse(0, 'text/html;charset=UTF-8;oneMore=param');
 
         $this->assertTrue($type1->equalsTo($type2));
         $this->assertFalse($type1->equalsTo($type3));

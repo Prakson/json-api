@@ -16,13 +16,14 @@
  * limitations under the License.
  */
 
-use \Closure;
-use \Neomerx\JsonApi\Contracts\Decoder\DecoderInterface;
-use \Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
-use \Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
-use \Neomerx\JsonApi\Contracts\Http\Headers\AcceptHeaderInterface;
+use Closure;
+use Neomerx\JsonApi\Contracts\Codec\CodecMatcherInterface;
+use Neomerx\JsonApi\Contracts\Decoder\DecoderInterface;
+use Neomerx\JsonApi\Contracts\Encoder\EncoderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\AcceptHeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\AcceptMediaTypeInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\HeaderInterface;
+use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -62,7 +63,7 @@ class CodecMatcher implements CodecMatcherInterface
     private $foundDecoder;
 
     /**
-     * @var MediaTypeInterface|null
+     * @var AcceptMediaTypeInterface|null
      */
     private $encoderHeaderMatchedType;
 
@@ -84,7 +85,7 @@ class CodecMatcher implements CodecMatcherInterface
     /**
      * @inheritdoc
      */
-    public function registerEncoder(MediaTypeInterface $mediaType, Closure $encoderClosure)
+    public function registerEncoder(MediaTypeInterface $mediaType, Closure $encoderClosure): void
     {
         $this->outputMediaTypes[] = [$mediaType, $encoderClosure];
     }
@@ -92,7 +93,7 @@ class CodecMatcher implements CodecMatcherInterface
     /**
      * @inheritdoc
      */
-    public function registerDecoder(MediaTypeInterface $mediaType, Closure $decoderClosure)
+    public function registerDecoder(MediaTypeInterface $mediaType, Closure $decoderClosure): void
     {
         $this->inputMediaTypes[] = [$mediaType, $decoderClosure];
     }
@@ -100,11 +101,15 @@ class CodecMatcher implements CodecMatcherInterface
     /**
      * @inheritdoc
      */
-    public function getEncoder()
+    public function getEncoder(): ?EncoderInterface
     {
         if ($this->foundEncoder instanceof Closure) {
             $closure = $this->foundEncoder;
-            $this->foundEncoder = $closure();
+            $encoder = $closure();
+
+            assert($encoder instanceof EncoderInterface);
+
+            $this->setEncoder($encoder);
         }
 
         return $this->foundEncoder;
@@ -113,19 +118,25 @@ class CodecMatcher implements CodecMatcherInterface
     /**
      * @inheritdoc
      */
-    public function setEncoder($encoder)
+    public function setEncoder($encoder): void
     {
+        assert($encoder instanceof EncoderInterface || $encoder instanceof Closure);
+
         $this->foundEncoder = $encoder;
     }
 
     /**
      * @inheritdoc
      */
-    public function getDecoder()
+    public function getDecoder(): ?DecoderInterface
     {
         if ($this->foundDecoder instanceof Closure) {
             $closure = $this->foundDecoder;
-            $this->foundDecoder = $closure();
+            $decoder = $closure();
+
+            assert($decoder instanceof DecoderInterface);
+
+            $this->setDecoder($decoder);
         }
 
         return $this->foundDecoder;
@@ -134,25 +145,28 @@ class CodecMatcher implements CodecMatcherInterface
     /**
      * @inheritdoc
      */
-    public function setDecoder($decoder)
+    public function setDecoder($decoder): void
     {
+        assert($decoder instanceof DecoderInterface || $decoder instanceof Closure);
+
         $this->foundDecoder = $decoder;
     }
 
     /**
      * @inheritdoc
      */
-    public function matchEncoder(AcceptHeaderInterface $acceptHeader)
+    public function matchEncoder(AcceptHeaderInterface $acceptHeader): void
     {
         foreach ($acceptHeader->getMediaTypes() as $headerMediaType) {
             // if quality factor 'q' === 0 it means this type is not acceptable (RFC 2616 #3.9)
             if ($headerMediaType->getQuality() > 0) {
                 /** @var MediaTypeInterface $registeredType */
                 foreach ($this->outputMediaTypes as list($registeredType, $closure)) {
+                    assert($closure instanceof Closure);
                     if ($registeredType->matchesTo($headerMediaType) === true) {
-                        $this->encoderHeaderMatchedType     = $headerMediaType;
-                        $this->encoderRegisteredMatchedType = $registeredType;
-                        $this->foundEncoder                 = $closure;
+                        $this->setEncoderHeaderMatchedType($headerMediaType);
+                        $this->setEncoderRegisteredMatchedType($registeredType);
+                        $this->setEncoder($closure);
 
                         return;
                     }
@@ -160,9 +174,9 @@ class CodecMatcher implements CodecMatcherInterface
             }
         }
 
-        $this->encoderHeaderMatchedType     = null;
-        $this->encoderRegisteredMatchedType = null;
-        $this->foundEncoder                 = null;
+        $this->setEncoderHeaderMatchedType(null);
+        $this->setEncoderRegisteredMatchedType(null);
+        $this->foundEncoder = null;
     }
 
     /**
@@ -172,7 +186,7 @@ class CodecMatcher implements CodecMatcherInterface
      *
      * @return void
      */
-    public function matchDecoder(HeaderInterface $contentTypeHeader)
+    public function matchDecoder(HeaderInterface $contentTypeHeader): void
     {
         foreach ($contentTypeHeader->getMediaTypes() as $headerMediaType) {
             /** @var MediaTypeInterface $registeredType */
@@ -180,7 +194,7 @@ class CodecMatcher implements CodecMatcherInterface
                 if ($registeredType->equalsTo($headerMediaType) === true) {
                     $this->decoderHeaderMatchedType     = $headerMediaType;
                     $this->decoderRegisteredMatchedType = $registeredType;
-                    $this->foundDecoder                 = $closure;
+                    $this->setDecoder($closure);
 
                     return;
                 }
@@ -195,7 +209,7 @@ class CodecMatcher implements CodecMatcherInterface
     /**
      * @inheritdoc
      */
-    public function getEncoderHeaderMatchedType()
+    public function getEncoderHeaderMatchedType(): ?AcceptMediaTypeInterface
     {
         return $this->encoderHeaderMatchedType;
     }
@@ -203,7 +217,7 @@ class CodecMatcher implements CodecMatcherInterface
     /**
      * @inheritdoc
      */
-    public function getEncoderRegisteredMatchedType()
+    public function getEncoderRegisteredMatchedType(): ?MediaTypeInterface
     {
         return $this->encoderRegisteredMatchedType;
     }
@@ -211,7 +225,7 @@ class CodecMatcher implements CodecMatcherInterface
     /**
      * @inheritdoc
      */
-    public function getDecoderHeaderMatchedType()
+    public function getDecoderHeaderMatchedType(): ?MediaTypeInterface
     {
         return $this->decoderHeaderMatchedType;
     }
@@ -219,8 +233,32 @@ class CodecMatcher implements CodecMatcherInterface
     /**
      * @inheritdoc
      */
-    public function getDecoderRegisteredMatchedType()
+    public function getDecoderRegisteredMatchedType(): ?MediaTypeInterface
     {
         return $this->decoderRegisteredMatchedType;
+    }
+
+    /**
+     * @param AcceptMediaTypeInterface|null $encoderHeaderMatchedType
+     *
+     * @return self
+     */
+    private function setEncoderHeaderMatchedType(?AcceptMediaTypeInterface $encoderHeaderMatchedType): self
+    {
+        $this->encoderHeaderMatchedType = $encoderHeaderMatchedType;
+
+        return $this;
+    }
+
+    /**
+     * @param MediaTypeInterface|null $encoderRegisteredMatchedType
+     *
+     * @return self
+     */
+    private function setEncoderRegisteredMatchedType(?MediaTypeInterface $encoderRegisteredMatchedType): self
+    {
+        $this->encoderRegisteredMatchedType = $encoderRegisteredMatchedType;
+
+        return $this;
     }
 }

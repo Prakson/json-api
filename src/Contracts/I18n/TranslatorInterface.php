@@ -27,5 +27,5 @@ interface TranslatorInterface
      *
      * @return string
      */
-    public function translate($format, array $parameters = []);
+    public function translate(string $format, array $parameters = []): string;
 }
