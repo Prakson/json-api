@@ -16,13 +16,13 @@
  * limitations under the License.
  */
 
-use \InvalidArgumentException;
-use \Neomerx\JsonApi\Document\Document;
-use \Neomerx\JsonApi\Factories\Exceptions;
-use \Neomerx\JsonApi\I18n\Translator as T;
-use \Neomerx\JsonApi\Contracts\Document\LinkInterface;
-use \Neomerx\JsonApi\Contracts\Schema\ResourceObjectInterface;
-use \Neomerx\JsonApi\Contracts\Schema\RelationshipObjectInterface;
+use InvalidArgumentException;
+use Neomerx\JsonApi\Contracts\Document\LinkInterface;
+use Neomerx\JsonApi\Contracts\Schema\RelationshipObjectInterface;
+use Neomerx\JsonApi\Contracts\Schema\ResourceObjectInterface;
+use Neomerx\JsonApi\Document\Document;
+use Neomerx\JsonApi\Factories\Exceptions;
+use Neomerx\JsonApi\I18n\Translator as T;
 
 /**
  * This is an auxiliary class for Document that help presenting elements.
@@ -59,7 +59,7 @@ class ElementPresenter
         ResourceObjectInterface $parent,
         RelationshipObjectInterface $relation,
         $value
-    ) {
+    ): void {
         $parentId     = $parent->getId();
         $parentType   = $parent->getType();
         $name         = $relation->getName();
@@ -100,7 +100,7 @@ class ElementPresenter
         ResourceObjectInterface $parent,
         RelationshipObjectInterface $relation,
         ResourceObjectInterface $resource
-    ) {
+    ): void {
         $parentId     = $parent->getId();
         $parentType   = $parent->getType();
         $parentExists = isset($target[$parentType][$parentId]);
@@ -109,7 +109,7 @@ class ElementPresenter
         if ($parentExists === true) {
             $parentAlias = &$target[$parentType][$parentId];
 
-            $name = $relation->getName();
+            $name               = $relation->getName();
             $alreadyGotRelation = isset($parentAlias[Document::KEYWORD_RELATIONSHIPS][$name]);
 
             $linkage = null;
@@ -151,7 +151,7 @@ class ElementPresenter
      *
      * @return array
      */
-    public function convertDataResourceToArray(ResourceObjectInterface $resource, $isShowAttributes)
+    public function convertDataResourceToArray(ResourceObjectInterface $resource, bool $isShowAttributes): array
     {
         return $this->convertResourceToArray(
             $resource,
@@ -168,7 +168,7 @@ class ElementPresenter
      *
      * @return array
      */
-    public function convertIncludedResourceToArray(ResourceObjectInterface $resource)
+    public function convertIncludedResourceToArray(ResourceObjectInterface $resource): array
     {
         return $this->convertResourceToArray(
             $resource,
@@ -179,12 +179,12 @@ class ElementPresenter
     }
 
     /**
-     * @param string|null                                                        $prefix
+     * @param string|null $prefix
      * @param array<string,\Neomerx\JsonApi\Contracts\Schema\LinkInterface>|null $links
      *
-     * @return array|null|string
+     * @return array|null
      */
-    public function getLinksRepresentation($prefix = null, $links = null)
+    public function getLinksRepresentation(string $prefix = null, array $links = null): ?array
     {
         $result = null;
         if (empty($links) === false) {
@@ -198,12 +198,12 @@ class ElementPresenter
     }
 
     /**
-     * @param string            $url
-     * @param null|object|array $meta
+     * @param string     $url
+     * @param null|mixed $meta
      *
      * @return string|array
      */
-    private function getUrlRepresentation($url, $meta = null)
+    private function getUrlRepresentation(string $url, $meta = null)
     {
         if ($meta === null) {
             return $url;
@@ -220,7 +220,7 @@ class ElementPresenter
      *
      * @return array<string,string>
      */
-    private function getLinkageRepresentation(ResourceObjectInterface $resource)
+    private function getLinkageRepresentation(ResourceObjectInterface $resource): array
     {
         $representation = [
             Document::KEYWORD_TYPE => $resource->getType(),
@@ -229,6 +229,7 @@ class ElementPresenter
         if (($meta = $resource->getLinkageMeta()) !== null) {
             $representation[Document::KEYWORD_META] = $meta;
         }
+
         return $representation;
     }
 
@@ -238,7 +239,7 @@ class ElementPresenter
      *
      * @return array|null|string
      */
-    private function getLinkRepresentation($prefix = null, LinkInterface $link = null)
+    private function getLinkRepresentation(string $prefix = null, LinkInterface $link = null)
     {
         return $link === null ? null : $this->getUrlRepresentation(
             $link->isTreatAsHref() === true ? $link->getSubHref() : $prefix . $link->getSubHref(),
@@ -255,7 +256,7 @@ class ElementPresenter
     private function getRelationRepresentation(
         ResourceObjectInterface $parent,
         RelationshipObjectInterface $relation
-    ) {
+    ): array {
         $isOk = ($relation->getName() !== Document::KEYWORD_SELF);
         if ($isOk === false) {
             throw new InvalidArgumentException(T::t(
@@ -288,8 +289,12 @@ class ElementPresenter
      *
      * @return array
      */
-    private function convertResourceToArray(ResourceObjectInterface $resource, $resourceLinks, $meta, $isShowAttributes)
-    {
+    private function convertResourceToArray(
+        ResourceObjectInterface $resource,
+        array $resourceLinks,
+        $meta,
+        bool $isShowAttributes
+    ): array {
         $representation = [
             Document::KEYWORD_TYPE => $resource->getType(),
         ];

@@ -60,8 +60,6 @@ class StackFrame implements StackFrameInterface
      */
     public function __construct(StackFrameReadOnlyInterface $previous = null)
     {
-        settype($level, 'int');
-
         $level = $previous === null ? 1 : $previous->getLevel() + 1;
 
         // debug check
@@ -127,7 +125,7 @@ class StackFrame implements StackFrameInterface
      *
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    private function setCurrentPath()
+    private function setCurrentPath(): void
     {
         if ($this->previous === null || $this->previous->getPath() === null) {
             $this->path = $this->relationship->getName();

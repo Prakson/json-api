@@ -61,7 +61,7 @@ class RelationshipObject implements RelationshipObjectInterface
     private $isDataEvaluated = false;
 
     /**
-     * @param string                    $name
+     * @param string|null               $name
      * @param object|array|null|Closure $data
      * @param array<string,\Neomerx\JsonApi\Contracts\Schema\LinkInterface> $links
      * @param object|array|null|Closure $meta
@@ -71,16 +71,14 @@ class RelationshipObject implements RelationshipObjectInterface
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
     public function __construct(
-        $name,
+        ?string $name,
         $data,
         array $links,
         $meta,
-        $isShowData,
-        $isRoot
+        bool $isShowData,
+        bool $isRoot
     ) {
-        is_bool($isRoot) === true ?: Exceptions::throwInvalidArgument('isRoot', $isRoot);
-        is_bool($isShowData) === true ?: Exceptions::throwInvalidArgument('isShowData', $isShowData);
-        $isOk = (($isRoot === false && is_string($name) === true) || ($isRoot === true && $name === null));
+        $isOk = (($isRoot === false && $name !== null) || ($isRoot === true && $name === null));
         $isOk ?: Exceptions::throwInvalidArgument('name', $name);
 
         $this->name       = $name;

@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Psr\Log\AbstractLogger;
-use \Psr\Log\LoggerAwareTrait;
+use Psr\Log\AbstractLogger;
+use Psr\Log\LoggerAwareTrait;
 
 /**
  * @package Neomerx\JsonApi

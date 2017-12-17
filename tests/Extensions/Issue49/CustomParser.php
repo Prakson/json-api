@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Encoder\Parser\Parser;
+use Neomerx\JsonApi\Encoder\Parser\Parser;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -26,7 +26,7 @@ class CustomParser extends Parser
     /**
      * @return array
      */
-    protected function analyzeCurrentData()
+    protected function analyzeCurrentData(): array
     {
         $curFrame            = $this->stack->end();
         $relationship        = $curFrame->getRelationship();

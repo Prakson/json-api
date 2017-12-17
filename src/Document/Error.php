@@ -19,7 +19,6 @@
 use Neomerx\JsonApi\Contracts\Document\DocumentInterface;
 use Neomerx\JsonApi\Contracts\Document\ErrorInterface;
 use Neomerx\JsonApi\Contracts\Document\LinkInterface;
-use Neomerx\JsonApi\Factories\Exceptions;
 
 /**
  * @package Neomerx\JsonApi
@@ -88,7 +87,7 @@ class Error implements ErrorInterface
         array $source = null,
         $meta = null
     ) {
-        $this->checkIdx($idx);
+        assert($idx === null || is_int($idx) === true || is_string($idx) === true);
 
         $this->idx    = $idx;
         $this->links  = ($aboutLink === null ? null : [DocumentInterface::KEYWORD_ERRORS_ABOUT => $aboutLink]);
@@ -162,14 +161,5 @@ class Error implements ErrorInterface
     public function getMeta()
     {
         return $this->meta;
-    }
-
-    /**
-     * @param int|string|null $idx
-     */
-    private function checkIdx($idx)
-    {
-        ($idx === null || is_int($idx) === true ||
-            is_string($idx) === true) ?: Exceptions::throwInvalidArgument('idx', $idx);
     }
 }

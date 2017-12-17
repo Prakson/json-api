@@ -24,6 +24,7 @@ use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
 use Neomerx\JsonApi\Contracts\Http\Headers\MediaTypeInterface;
 use Neomerx\JsonApi\Contracts\Http\Headers\SupportedExtensionsInterface;
 use Neomerx\JsonApi\Contracts\Http\ResponsesInterface;
+use Neomerx\JsonApi\Contracts\Schema\ContainerInterface;
 use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
 use Neomerx\JsonApi\Document\Error;
 use Neomerx\JsonApi\Exceptions\ErrorCollection;
@@ -388,13 +389,14 @@ class ResponsesTest extends BaseTestCase
     {
         $linkMock = Mockery::mock(LinkInterface::class);
 
-        $containerMock = Mockery::mock(SchemaProviderInterface::class);
+        $containerMock = Mockery::mock(ContainerInterface::class);
+        $providerMock  = Mockery::mock(SchemaProviderInterface::class);
 
         /** @noinspection PhpMethodParametersCountMismatchInspection */
         $this->mock->shouldReceive('getSchemaContainer')->once()->withNoArgs()->andReturn($containerMock);
 
-        $containerMock->shouldReceive('getSchema')->once()->with($resource)->andReturnSelf();
-        $containerMock->shouldReceive('getSelfSubLink')->once()->with($resource)->andReturn($linkMock);
+        $containerMock->shouldReceive('getSchema')->once()->with($resource)->andReturn($providerMock);
+        $providerMock->shouldReceive('getSelfSubLink')->once()->with($resource)->andReturn($linkMock);
         $linkMock->shouldReceive('getSubHref')->once()->withNoArgs()->andReturn($subUrl);
 
         $this->mock->shouldReceive('getUrlPrefix')->once()->withNoArgs()->andReturn($prefix);

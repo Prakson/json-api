@@ -16,10 +16,10 @@
  * limitations under the License.
  */
 
-use \Exception;
-use \RuntimeException;
-use \Neomerx\JsonApi\I18n\Translator as T;
-use \Neomerx\JsonApi\Contracts\Document\ErrorInterface;
+use Exception;
+use Neomerx\JsonApi\Contracts\Document\ErrorInterface;
+use Neomerx\JsonApi\I18n\Translator as T;
+use RuntimeException;
 
 /**
  * @package Neomerx\JsonApi
@@ -62,7 +62,7 @@ class JsonApiException extends RuntimeException
      * @SuppressWarnings(PHPMD.StaticAccess)
      * @SuppressWarnings(PHPMD.ElseExpression)
      */
-    public function __construct($errors, $httpCode = self::DEFAULT_HTTP_CODE, Exception $previous = null)
+    public function __construct($errors, int $httpCode = self::DEFAULT_HTTP_CODE, Exception $previous = null)
     {
         parent::__construct(T::t('JSON API error'), 0, $previous);
 
@@ -82,8 +82,10 @@ class JsonApiException extends RuntimeException
 
     /**
      * @param ErrorInterface $error
+     *
+     * @return void
      */
-    public function addError(ErrorInterface $error)
+    public function addError(ErrorInterface $error): void
     {
         $this->errors[] = $error;
     }
@@ -93,7 +95,7 @@ class JsonApiException extends RuntimeException
      *
      * @return void
      */
-    public function addErrors(ErrorCollection $errors)
+    public function addErrors(ErrorCollection $errors): void
     {
         foreach ($errors as $error) {
             $this->addError($error);
@@ -105,7 +107,7 @@ class JsonApiException extends RuntimeException
      *
      * @return void
      */
-    public function addErrorsFromArray(array $errors)
+    public function addErrorsFromArray(array $errors): void
     {
         foreach ($errors as $error) {
             $this->addError($error);
@@ -115,7 +117,7 @@ class JsonApiException extends RuntimeException
     /**
      * @return ErrorCollection
      */
-    public function getErrors()
+    public function getErrors(): ErrorCollection
     {
         return $this->errors;
     }
@@ -123,7 +125,7 @@ class JsonApiException extends RuntimeException
     /**
      * @return int
      */
-    public function getHttpCode()
+    public function getHttpCode(): int
     {
         return $this->httpCode;
     }

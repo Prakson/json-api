@@ -100,8 +100,6 @@ class ParserManager implements ParserManagerInterface, LoggerAwareInterface
      */
     public function getFieldSet(string $type): ?array
     {
-        settype($type, 'string');
-
         if (array_key_exists($type, $this->fieldSetCache) === false) {
             $fieldSet                   = $this->parameterAnalyzer->getParameters()->getFieldSet($type);
             $this->fieldSetCache[$type] = $fieldSet === null ? null : array_flip(array_values($fieldSet));

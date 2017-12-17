@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Contracts\Encoder\Parser\ParserReplyHandlerInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Parser\ParserReplyHandlerInterface;
 
 /**
  * Interpret parser replies and translate them to commands that build JSON document.

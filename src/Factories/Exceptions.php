@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \LogicException;
-use \InvalidArgumentException;
+use InvalidArgumentException;
+use LogicException;
 
 /**
  * @package Neomerx\JsonApi
@@ -30,7 +30,7 @@ class Exceptions
      *
      * @throws InvalidArgumentException
      */
-    public static function throwInvalidArgument($parameterName, $value)
+    public static function throwInvalidArgument(string $parameterName, $value): void
     {
         $value ?: null;
 
@@ -42,7 +42,7 @@ class Exceptions
      *
      * @throws LogicException
      */
-    public static function throwLogicException($message = null)
+    public static function throwLogicException(string $message = null): void
     {
         throw new LogicException($message);
     }

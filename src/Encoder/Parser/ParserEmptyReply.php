@@ -16,8 +16,8 @@
  * limitations under the License.
  */
 
-use \Neomerx\JsonApi\Factories\Exceptions;
-use \Neomerx\JsonApi\Contracts\Encoder\Stack\StackReadOnlyInterface;
+use Neomerx\JsonApi\Contracts\Encoder\Stack\StackReadOnlyInterface;
+use Neomerx\JsonApi\Factories\Exceptions;
 
 /**
  * @package Neomerx\JsonApi
@@ -30,7 +30,7 @@ class ParserEmptyReply extends BaseReply
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    public function __construct($replyType, StackReadOnlyInterface $stack)
+    public function __construct(int $replyType, StackReadOnlyInterface $stack)
     {
         $isOk = ($replyType === self::REPLY_TYPE_NULL_RESOURCE_STARTED ||
             $replyType === self::REPLY_TYPE_EMPTY_RESOURCE_STARTED);

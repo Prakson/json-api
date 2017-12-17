@@ -118,16 +118,6 @@ class CodecMatcher implements CodecMatcherInterface
     /**
      * @inheritdoc
      */
-    public function setEncoder($encoder): void
-    {
-        assert($encoder instanceof EncoderInterface || $encoder instanceof Closure);
-
-        $this->foundEncoder = $encoder;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function getDecoder(): ?DecoderInterface
     {
         if ($this->foundDecoder instanceof Closure) {
@@ -145,16 +135,6 @@ class CodecMatcher implements CodecMatcherInterface
     /**
      * @inheritdoc
      */
-    public function setDecoder($decoder): void
-    {
-        assert($decoder instanceof DecoderInterface || $decoder instanceof Closure);
-
-        $this->foundDecoder = $decoder;
-    }
-
-    /**
-     * @inheritdoc
-     */
     public function matchEncoder(AcceptHeaderInterface $acceptHeader): void
     {
         foreach ($acceptHeader->getMediaTypes() as $headerMediaType) {
@@ -166,7 +146,7 @@ class CodecMatcher implements CodecMatcherInterface
                     if ($registeredType->matchesTo($headerMediaType) === true) {
                         $this->setEncoderHeaderMatchedType($headerMediaType);
                         $this->setEncoderRegisteredMatchedType($registeredType);
-                        $this->setEncoder($closure);
+                        $this->setEncoderClosure($closure);
 
                         return;
                     }
@@ -194,7 +174,7 @@ class CodecMatcher implements CodecMatcherInterface
                 if ($registeredType->equalsTo($headerMediaType) === true) {
                     $this->decoderHeaderMatchedType     = $headerMediaType;
                     $this->decoderRegisteredMatchedType = $registeredType;
-                    $this->setDecoder($closure);
+                    $this->setDecoderClosure($closure);
 
                     return;
                 }
@@ -236,6 +216,42 @@ class CodecMatcher implements CodecMatcherInterface
     public function getDecoderRegisteredMatchedType(): ?MediaTypeInterface
     {
         return $this->decoderRegisteredMatchedType;
+    }
+
+    /**
+     * @param EncoderInterface $encoder
+     *
+     * @return void
+     */
+    private function setEncoder(EncoderInterface $encoder): void
+    {
+        $this->foundEncoder = $encoder;
+    }
+
+    /**
+     * @param Closure $closure
+     *
+     * @return void
+     */
+    private function setEncoderClosure(Closure $closure): void
+    {
+        $this->foundEncoder = $closure;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function setDecoder(DecoderInterface $decoder): void
+    {
+        $this->foundDecoder = $decoder;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function setDecoderClosure(Closure $decoder): void
+    {
+        $this->foundDecoder = $decoder;
     }
 
     /**

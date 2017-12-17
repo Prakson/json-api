@@ -200,7 +200,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
     /**
      * @return array
      */
-    protected function analyzeCurrentData()
+    protected function analyzeCurrentData():array
     {
         $data   = $this->getCurrentData();
         $result = $this->analyzeData($data);
@@ -228,7 +228,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
      * @SuppressWarnings(PHPMD.ElseExpression)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function analyzeData($data)
+    protected function analyzeData($data): array
     {
         $isCollection    = true;
         $isEmpty         = true;
@@ -273,7 +273,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function getSchema($resource, StackFrameReadOnlyInterface $frame)
+    private function getSchema($resource, StackFrameReadOnlyInterface $frame): SchemaProviderInterface
     {
         try {
             $schema = $this->container->getSchema($resource);
@@ -292,7 +292,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    private function createReplyForEmptyData($data)
+    private function createReplyForEmptyData(?array $data): ParserReplyInterface
     {
         ($data === null || (is_array($data) === true && empty($data) === true)) ?: Exceptions::throwLogicException();
 
@@ -305,7 +305,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
     /**
      * @return ParserReplyInterface
      */
-    private function createReplyResourceStarted()
+    private function createReplyResourceStarted(): ParserReplyInterface
     {
         return $this->parserFactory->createReply(ParserReplyInterface::REPLY_TYPE_RESOURCE_STARTED, $this->stack);
     }
@@ -313,7 +313,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
     /**
      * @return ParserReplyInterface
      */
-    private function createReplyResourceCompleted()
+    private function createReplyResourceCompleted(): ParserReplyInterface
     {
         return $this->parserFactory->createReply(ParserReplyInterface::REPLY_TYPE_RESOURCE_COMPLETED, $this->stack);
     }
@@ -321,7 +321,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
     /**
      * @return bool
      */
-    private function shouldParseRelationships()
+    private function shouldParseRelationships(): bool
     {
         return $this->manager->isShouldParseRelationships($this->stack);
     }
@@ -329,7 +329,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
     /**
      * @return string[]
      */
-    private function getIncludeRelationships()
+    private function getIncludeRelationships(): array
     {
         return $this->manager->getIncludeRelationships($this->stack);
     }
@@ -337,7 +337,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
     /**
      * @return bool
      */
-    private function isRelationshipIncludedOrInFieldSet()
+    private function isRelationshipIncludedOrInFieldSet(): bool
     {
         return
             $this->manager->isRelationshipInFieldSet($this->stack) === true ||
@@ -349,7 +349,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
      *
      * @return bool
      */
-    private function checkCircular(ResourceObjectInterface $resourceObject)
+    private function checkCircular(ResourceObjectInterface $resourceObject): bool
     {
         foreach ($this->stack as $frame) {
             /** @var StackFrameReadOnlyInterface $frame */
@@ -367,7 +367,7 @@ class Parser implements ParserInterface, LoggerAwareInterface
      *
      * @return array <string, int>|null
      */
-    private function getFieldSet($resourceType)
+    private function getFieldSet(string $resourceType): ?array
     {
         return $this->manager->getFieldSet($resourceType);
     }

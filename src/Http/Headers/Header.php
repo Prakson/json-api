@@ -100,7 +100,7 @@ class Header implements HeaderInterface
      *
      * @SuppressWarnings(PHPMD.StaticAccess)
      */
-    protected static function parseMediaType($position, $mediaType)
+    protected static function parseMediaType(int $position,string $mediaType)
     {
         return MediaType::parse($position, $mediaType);
     }
@@ -111,7 +111,7 @@ class Header implements HeaderInterface
      *
      * @return Header
      */
-    protected static function newInstance($name, $mediaTypes)
+    protected static function newInstance(string $name, array $mediaTypes)
     {
         return new static($name, $mediaTypes);
     }

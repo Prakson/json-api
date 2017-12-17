@@ -220,7 +220,7 @@ class Encoder implements EncoderInterface, LoggerAwareInterface
         ContainerInterface $container,
         $data,
         EncodingParametersInterface $parameters = null
-    ) {
+    ): array {
         $this->checkInputData($data);
 
         $docWriter     = $this->getFactory()->createDocument();

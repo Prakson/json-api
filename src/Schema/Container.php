@@ -55,9 +55,9 @@ class Container implements ContainerInterface, LoggerAwareInterface
 
     /**
      * @param SchemaFactoryInterface $factory
-     * @param array                  $schemas
+     * @param iterable               $schemas
      */
-    public function __construct(SchemaFactoryInterface $factory, array $schemas = [])
+    public function __construct(SchemaFactoryInterface $factory, iterable $schemas = [])
     {
         $this->factory = $factory;
         $this->registerArray($schemas);
@@ -77,8 +77,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
     public function register(string $type, $schema): void
     {
         // Type must be non-empty string
-        $isOk = (is_string($type) === true && empty($type) === false);
-        if ($isOk === false) {
+        if (empty($type) === true) {
             throw new InvalidArgumentException(T::t('Type must be non-empty string.'));
         }
 
@@ -113,11 +112,11 @@ class Container implements ContainerInterface, LoggerAwareInterface
     /**
      * Register providers for resource types.
      *
-     * @param array $schemas
+     * @param iterable $schemas
      *
      * @return void
      */
-    public function registerArray(array $schemas)
+    public function registerArray(iterable $schemas): void
     {
         foreach ($schemas as $type => $schema) {
             $this->register($type, $schema);
@@ -228,7 +227,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return bool
      */
-    protected function hasProviderMapping($type): bool
+    protected function hasProviderMapping(string $type): bool
     {
         return array_key_exists($type, $this->providerMapping);
     }
@@ -328,6 +327,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
 
     /**
      * @deprecated Use `createSchemaFromCallable` method instead.
+     *
      * @param Closure $closure
      *
      * @return SchemaProviderInterface
@@ -344,7 +344,7 @@ class Container implements ContainerInterface, LoggerAwareInterface
      *
      * @return SchemaProviderInterface
      */
-    protected function createSchemaFromCallable(callable $callable)
+    protected function createSchemaFromCallable(callable $callable): SchemaProviderInterface
     {
         $schema = $callable instanceof Closure ?
             $this->createSchemaFromClosure($callable) : call_user_func($callable, $this->getFactory());

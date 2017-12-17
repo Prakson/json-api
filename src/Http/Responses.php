@@ -46,37 +46,37 @@ abstract class Responses implements ResponsesInterface
      *
      * @return mixed
      */
-    abstract protected function createResponse($content, $statusCode, array $headers);
+    abstract protected function createResponse(?string $content, int $statusCode, array $headers);
 
     /**
      * @return EncoderInterface
      */
-    abstract protected function getEncoder();
+    abstract protected function getEncoder(): EncoderInterface;
 
     /**
      * @return string|null
      */
-    abstract protected function getUrlPrefix();
+    abstract protected function getUrlPrefix(): ?string;
 
     /**
      * @return EncodingParametersInterface|null
      */
-    abstract protected function getEncodingParameters();
+    abstract protected function getEncodingParameters(): ?EncodingParametersInterface;
 
     /**
      * @return ContainerInterface
      */
-    abstract protected function getSchemaContainer();
+    abstract protected function getSchemaContainer(): ?ContainerInterface;
 
     /**
      * @return SupportedExtensionsInterface|null
      */
-    abstract protected function getSupportedExtensions();
+    abstract protected function getSupportedExtensions(): ?SupportedExtensionsInterface;
 
     /**
      * @return MediaTypeInterface
      */
-    abstract protected function getMediaType();
+    abstract protected function getMediaType(): MediaTypeInterface;
 
     /**
      * @inheritdoc
@@ -170,7 +170,7 @@ abstract class Responses implements ResponsesInterface
      *
      * @return string
      */
-    protected function getResourceLocationUrl($resource)
+    protected function getResourceLocationUrl($resource): string
     {
         $resSubUrl = $this->getSchemaContainer()->getSchema($resource)->getSelfSubLink($resource)->getSubHref();
         $urlPrefix = $this->getUrlPrefix();
@@ -189,8 +189,12 @@ abstract class Responses implements ResponsesInterface
      *
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      */
-    protected function createJsonApiResponse($content, $statusCode, array $headers = [], $addContentType = true)
-    {
+    protected function createJsonApiResponse(
+        ?string $content,
+        int $statusCode,
+        array $headers = [],
+        $addContentType = true
+    ) {
         if ($addContentType === true) {
             $mediaType   = $this->getMediaType();
             $contentType = $mediaType->getMediaType();

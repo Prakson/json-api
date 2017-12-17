@@ -180,16 +180,6 @@ class AcceptHeaderTest extends BaseTestCase
     }
 
     /**
-     * Test invalid constructor parameters.
-     *
-     * @expectedException \InvalidArgumentException
-     */
-    public function testInvalidConstructorParams()
-    {
-        new AcceptHeader(null);
-    }
-
-    /**
      * @param string[]        $mediaTypes
      * @param HeaderInterface $header
      *

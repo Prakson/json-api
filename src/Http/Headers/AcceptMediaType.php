@@ -120,7 +120,7 @@ class AcceptMediaType extends MediaType implements AcceptMediaTypeInterface
      *
      * @return array
      */
-    private static function parseQualityAndParameters(array $fields)
+    private static function parseQualityAndParameters(array $fields): array
     {
         $quality     = 1;
         $qParamFound = false;

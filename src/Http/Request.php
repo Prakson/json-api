@@ -16,11 +16,11 @@
  * limitations under the License.
  */
 
-use \Closure;
-use \LogicException;
-use \Psr\Http\Message\UriInterface;
-use \Psr\Http\Message\StreamInterface;
-use \Psr\Http\Message\ServerRequestInterface;
+use Closure;
+use LogicException;
+use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
 
 /**
  * @package Neomerx\JsonApi

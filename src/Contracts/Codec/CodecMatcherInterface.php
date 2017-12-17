@@ -57,29 +57,11 @@ interface CodecMatcherInterface
     public function getEncoder(): ?EncoderInterface;
 
     /**
-     * Set encoder.
-     *
-     * @param EncoderInterface|Closure $encoder
-     *
-     * @return void
-     */
-    public function setEncoder($encoder): void;
-
-    /**
      * Get decoder.
      *
      * @return DecoderInterface|null
      */
     public function getDecoder(): ?DecoderInterface;
-
-    /**
-     * Set decoder.
-     *
-     * @param DecoderInterface|Closure $decoder
-     *
-     * @return void
-     */
-    public function setDecoder($decoder): void;
 
     /**
      * Find best encoder match for 'Accept' header.

@@ -127,10 +127,10 @@ class ResourceObject implements ResourceObjectInterface
     public function __construct(
         SchemaProviderInterface $schema,
         $resource,
-        $isInArray,
+        bool $isInArray,
         array $attributeKeysFilter = null
     ) {
-        $this->checkInput($resource, $isInArray);
+        is_object($resource) === true ?: Exceptions::throwInvalidArgument('resource', $resource);
 
         $this->schema              = $schema;
         $this->resource            = $resource;
@@ -283,17 +283,5 @@ class ResourceObject implements ResourceObjectInterface
         }
 
         return $this->relationshipMeta;
-    }
-
-    /**
-     * @param object $resource
-     * @param bool   $isInArray
-     *
-     * @SuppressWarnings(PHPMD.StaticAccess)
-     */
-    private function checkInput($resource, $isInArray)
-    {
-        is_bool($isInArray) === true ?: Exceptions::throwInvalidArgument('isInArray', $isInArray);
-        is_object($resource) === true ?: Exceptions::throwInvalidArgument('resource', $resource);
     }
 }
