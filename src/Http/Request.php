@@ -40,25 +40,13 @@ class Request implements ServerRequestInterface
     private $getHeaderClosure;
 
     /**
-     * @var Closure
-     */
-    private $getQueryParamsClosure;
-
-    /**
      * @param Closure $getMethodClosure
      * @param Closure $getHeaderClosure
-     * @param Closure $getQueryParamsClosure
-     *
-     * @SuppressWarnings(PHPMD.LongVariable)
      */
-    public function __construct(
-        Closure $getMethodClosure,
-        Closure $getHeaderClosure,
-        Closure $getQueryParamsClosure
-    ) {
-        $this->getMethodClosure      = $getMethodClosure;
-        $this->getHeaderClosure      = $getHeaderClosure;
-        $this->getQueryParamsClosure = $getQueryParamsClosure;
+    public function __construct(Closure $getMethodClosure, Closure $getHeaderClosure)
+    {
+        $this->getMethodClosure = $getMethodClosure;
+        $this->getHeaderClosure = $getHeaderClosure;
     }
 
     /**
@@ -75,9 +63,9 @@ class Request implements ServerRequestInterface
     /**
      * @inheritdoc
      */
-    public function getQueryParams()
+    public function getMethod()
     {
-        $closure = $this->getQueryParamsClosure;
+        $closure = $this->getMethodClosure;
         $result  = $closure();
 
         return $result;
@@ -86,12 +74,10 @@ class Request implements ServerRequestInterface
     /**
      * @inheritdoc
      */
-    public function getMethod()
+    public function getQueryParams()
     {
-        $closure = $this->getMethodClosure;
-        $result  = $closure();
-
-        return $result;
+        // Method is not used.
+        throw new LogicException();
     }
 
     /**

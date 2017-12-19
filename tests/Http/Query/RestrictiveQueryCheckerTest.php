@@ -16,15 +16,12 @@
  * limitations under the License.
  */
 
-use Mockery;
-use Mockery\Mock;
 use Neomerx\JsonApi\Contracts\Document\ErrorInterface;
 use Neomerx\JsonApi\Contracts\Http\Query\QueryCheckerInterface;
 use Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface;
 use Neomerx\JsonApi\Exceptions\JsonApiException;
 use Neomerx\JsonApi\Factories\Factory;
 use Neomerx\Tests\JsonApi\BaseTestCase;
-use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -48,19 +45,13 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
     ];
 
     /**
-     * @var Mock
-     */
-    private $mockRequest;
-
-    /**
      * Set up.
      */
     protected function setUp()
     {
         parent::setUp();
 
-        $this->parser      = (new Factory())->createQueryParametersParser();
-        $this->mockRequest = Mockery::mock(ServerRequestInterface::class);
+        $this->parser = (new Factory())->createQueryParametersParser();
     }
 
     /**
@@ -70,9 +61,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
     {
         $this->assertNotNull($checker = $this->getChecker());
 
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($this->requestParams)
-        );
+        $parameters = $this->parser->parse($this->requestParams);
 
         $checker->checkQuery($parameters);
     }
@@ -87,9 +76,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
             ['author', 'comments', 'comments.author', 'and.one.more.path']
         ));
 
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($this->requestParams)
-        );
+        $parameters = $this->parser->parse($this->requestParams);
 
         $checker->checkQuery($parameters);
     }
@@ -103,9 +90,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
             false,
             ['author', 'comments']
         );
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($this->requestParams)
-        );
+        $parameters = $this->parser->parse($this->requestParams);
 
         $exception = null;
         try {
@@ -129,9 +114,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
             ['type1' => ['fields1', 'fields2', 'fields3'],]
         ));
 
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($this->requestParams)
-        );
+        $parameters = $this->parser->parse($this->requestParams);
 
         $checker->checkQuery($parameters);
     }
@@ -147,9 +130,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
             ['type1' => null] // all fields are allowed for type1
         ));
 
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($this->requestParams)
-        );
+        $parameters = $this->parser->parse($this->requestParams);
 
         $checker->checkQuery($parameters);
     }
@@ -168,9 +149,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
             ['another' => 'filter']
         );
 
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($this->requestParams)
-        );
+        $parameters = $this->parser->parse($this->requestParams);
 
         $exception = null;
         try {
@@ -196,9 +175,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
             ['another' => 'paging-param']
         );
 
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($this->requestParams)
-        );
+        $parameters = $this->parser->parse($this->requestParams);
 
         $exception = null;
         try {
@@ -222,9 +199,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
             ['nonExistingType' => null]
         );
 
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($this->requestParams)
-        );
+        $parameters = $this->parser->parse($this->requestParams);
 
         $exception = null;
         try {
@@ -247,9 +222,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
             ['type1' => ['fields1']] // only 1 allowed field (2 in request)
         );
 
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($this->requestParams)
-        );
+        $parameters = $this->parser->parse($this->requestParams);
 
         $exception = null;
         try {
@@ -274,9 +247,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
             $allowedSortParams
         ));
 
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($this->requestParams)
-        );
+        $parameters = $this->parser->parse($this->requestParams);
 
         $checker->checkQuery($parameters);
     }
@@ -294,9 +265,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
             $allowedSortParams
         );
 
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($this->requestParams)
-        );
+        $parameters = $this->parser->parse($this->requestParams);
 
         $exception = null;
         try {
@@ -319,9 +288,7 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
         ));
 
         $parameters = $this->parser->parse(
-            $this->prepareRequest(
-                array_merge($this->requestParams, ['some' => ['other', 'parameters']])
-            )
+            array_merge($this->requestParams, ['some' => ['other', 'parameters']])
         );
 
         $checker->checkQuery($parameters);
@@ -336,9 +303,9 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
             false
         );
 
-        $parameters = $this->parser->parse($this->prepareRequest(
+        $parameters = $this->parser->parse(
             array_merge($this->requestParams, ['some' => ['other', 'parameters']])
-        ));
+        );
 
         $exception = null;
         try {
@@ -349,21 +316,6 @@ class RestrictiveQueryCheckerTest extends BaseTestCase
 
         $this->assertNotNull($exception);
         $this->assertEquals(JsonApiException::HTTP_CODE_BAD_REQUEST, $exception->getHttpCode());
-    }
-
-    /**
-     * @param array $input
-     *
-     * @return ServerRequestInterface
-     */
-    private function prepareRequest(array $input)
-    {
-        $this->mockRequest->shouldReceive('getQueryParams')->withArgs([])->once()->andReturn($input);
-
-        /** @var ServerRequestInterface $request */
-        $request = $this->mockRequest;
-
-        return $request;
     }
 
     /**

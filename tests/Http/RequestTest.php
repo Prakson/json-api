@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 
-use \Mockery;
-use \LogicException;
-use \Neomerx\JsonApi\Http\Request;
-use \Psr\Http\Message\UriInterface;
-use \Psr\Http\Message\StreamInterface;
-use \Neomerx\Tests\JsonApi\BaseTestCase;
+use LogicException;
+use Mockery;
+use Neomerx\JsonApi\Http\Request;
+use Neomerx\Tests\JsonApi\BaseTestCase;
+use Psr\Http\Message\StreamInterface;
+use Psr\Http\Message\UriInterface;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -37,8 +37,6 @@ class RequestTest extends BaseTestCase
             return null;
         }, function () {
             return null;
-        }, function () {
-            return null;
         });
 
         $methodsAndParams = [
@@ -48,6 +46,7 @@ class RequestTest extends BaseTestCase
             'getCookieParams'     => [],
             'getHeaderLine'       => ['name'],
             'getHeaders'          => [],
+            'getQueryParams'      => [],
             'getParsedBody'       => [],
             'getProtocolVersion'  => [],
             'getRequestTarget'    => [],

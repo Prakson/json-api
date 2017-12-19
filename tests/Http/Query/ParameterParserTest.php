@@ -16,13 +16,10 @@
  * limitations under the License.
  */
 
-use \LogicException;
-use \Neomerx\JsonApi\Http\Request;
-use \Neomerx\JsonApi\Factories\Factory;
-use \Neomerx\Tests\JsonApi\BaseTestCase;
-use \Psr\Http\Message\ServerRequestInterface;
-use \Neomerx\JsonApi\Exceptions\JsonApiException;
-use \Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface;
+use Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface;
+use Neomerx\JsonApi\Exceptions\JsonApiException;
+use Neomerx\JsonApi\Factories\Factory;
+use Neomerx\Tests\JsonApi\BaseTestCase;
 
 /**
  * @package Neomerx\Tests\JsonApi
@@ -38,16 +35,6 @@ class ParameterParserTest extends BaseTestCase
     private $parser;
 
     /**
-     * @var array
-     */
-    private $expectedCalls = [];
-
-    /**
-     * @var array
-     */
-    private $actualCalls = [];
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -55,20 +42,6 @@ class ParameterParserTest extends BaseTestCase
         parent::setUp();
 
         $this->parser = (new Factory())->createQueryParametersParser();
-
-        $this->expectedCalls = $this->actualCalls = [
-            self::QUERY_PARAMS => 0,
-        ];
-    }
-
-    /**
-     * @inheritdoc
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        $this->assertEquals($this->expectedCalls, $this->actualCalls);
     }
 
     /**
@@ -76,7 +49,7 @@ class ParameterParserTest extends BaseTestCase
      */
     public function testHeadersWithNoParameters()
     {
-        $parameters = $this->parser->parse($this->prepareRequest([]));
+        $parameters = $this->parser->parse([]);
 
         $this->assertNull($parameters->getFieldSets());
         $this->assertNull($parameters->getIncludePaths());
@@ -103,10 +76,10 @@ class ParameterParserTest extends BaseTestCase
             'page'    => $paging,
         ];
 
-        $parameters = $this->parser->parse($this->prepareRequest($input));
+        $parameters = $this->parser->parse($input);
 
         $this->assertEquals(['type1' => ['fields1', 'fields2']], $parameters->getFieldSets());
-        $this->assertEquals(['author' , 'comments', 'comments.author'], $parameters->getIncludePaths());
+        $this->assertEquals(['author', 'comments', 'comments.author'], $parameters->getIncludePaths());
 
         $this->assertCount(3, $sortParams = $parameters->getSortParameters());
         $this->assertEquals('created', $sortParams[0]->getField());
@@ -128,12 +101,12 @@ class ParameterParserTest extends BaseTestCase
      */
     public function testSortParamsStringConversion()
     {
-        $expected = '-created,title,name';
-        $input = ['sort' => $expected];
-        $parameters = $this->parser->parse($this->prepareRequest($input));
+        $expected   = '-created,title,name';
+        $input      = ['sort' => $expected];
+        $parameters = $this->parser->parse($input);
 
         $actual = implode(',', array_map(function ($param) {
-            return (string) $param;
+            return (string)$param;
         }, $parameters->getSortParameters()));
 
         $this->assertEquals($expected, $actual);
@@ -145,12 +118,12 @@ class ParameterParserTest extends BaseTestCase
     public function testSendIncorrectSortParams1()
     {
         $input = [
-            'sort' => '-created,,name'
+            'sort' => '-created,,name',
         ];
 
         $exception = null;
         try {
-            $this->parser->parse($this->prepareRequest($input));
+            $this->parser->parse($input);
         } catch (JsonApiException $exception) {
         }
 
@@ -164,12 +137,12 @@ class ParameterParserTest extends BaseTestCase
     public function testSendIncorrectSortParams2()
     {
         $input = [
-            'sort' => '-created,+,name'
+            'sort' => '-created,+,name',
         ];
 
         $exception = null;
         try {
-            $this->parser->parse($this->prepareRequest($input));
+            $this->parser->parse($input);
         } catch (JsonApiException $exception) {
         }
 
@@ -189,7 +162,7 @@ class ParameterParserTest extends BaseTestCase
         $input = [
             'page' => '2',
         ];
-        $this->assertNotNull($parameters = $this->parser->parse($this->prepareRequest($input)));
+        $this->assertNotNull($parameters = $this->parser->parse($input));
         $this->assertNull($parameters->getPaginationParameters());
     }
 
@@ -205,7 +178,7 @@ class ParameterParserTest extends BaseTestCase
         $input = [
             'filter' => 'whatever',
         ];
-        $this->assertNotNull($parameters = $this->parser->parse($this->prepareRequest($input)));
+        $this->assertNotNull($parameters = $this->parser->parse($input));
 
         $this->assertNull($parameters->getSortParameters());
     }
@@ -222,7 +195,7 @@ class ParameterParserTest extends BaseTestCase
         $input = [
             'include' => ['whatever'],
         ];
-        $this->assertNotNull($parameters = $this->parser->parse($this->prepareRequest($input)));
+        $this->assertNotNull($parameters = $this->parser->parse($input));
 
         $this->assertNull($parameters->getIncludePaths());
     }
@@ -239,7 +212,7 @@ class ParameterParserTest extends BaseTestCase
         $input = [
             'sort' => ['whatever'],
         ];
-        $this->assertNotNull($parameters = $this->parser->parse($this->prepareRequest($input)));
+        $this->assertNotNull($parameters = $this->parser->parse($input));
 
         $this->assertNull($parameters->getIncludePaths());
     }
@@ -249,13 +222,11 @@ class ParameterParserTest extends BaseTestCase
      */
     public function testUnrecognizedParameters()
     {
-        $input = [
+        $input      = [
             'include'      => 'author,comments,comments.author',
             'unrecognized' => ['parameters'],
         ];
-        $parameters = $this->parser->parse(
-            $this->prepareRequest($input)
-        );
+        $parameters = $this->parser->parse($input);
 
         $this->assertEquals(['unrecognized' => ['parameters']], $parameters->getUnrecognizedParameters());
     }
@@ -267,10 +238,10 @@ class ParameterParserTest extends BaseTestCase
      */
     public function testFieldSetWithEmptyField()
     {
-        $input = [
-            'fields' => ['type1' => 'fields1,fields2', 'type2' => '']
+        $input  = [
+            'fields' => ['type1' => 'fields1,fields2', 'type2' => ''],
         ];
-        $result = $this->parser->parse($this->prepareRequest($input));
+        $result = $this->parser->parse($input);
 
         // note type2 has empty field set
         $this->assertEquals(['type1' => ['fields1', 'fields2'], 'type2' => []], $result->getFieldSets());
@@ -284,9 +255,9 @@ class ParameterParserTest extends BaseTestCase
     public function testInvalidFieldSetWithMultiDimensionArray()
     {
         $input = [
-            'fields' => ['type' => ['subtype' => 'fields1,fields2']]
+            'fields' => ['type' => ['subtype' => 'fields1,fields2']],
         ];
-        $this->parser->parse($this->prepareRequest($input));
+        $this->parser->parse($input);
     }
 
     /**
@@ -300,31 +271,9 @@ class ParameterParserTest extends BaseTestCase
             'unrecognized' => 'foo',
         ];
 
-        $parameters = $this->parser->parse($this->prepareRequest($input));
+        $parameters = $this->parser->parse($input);
 
         $this->assertTrue($parameters->isEmpty());
         $this->assertEquals(['unrecognized' => 'foo'], $parameters->getUnrecognizedParameters());
-    }
-
-    /**
-     * @param array $input
-     * @param int   $parametersTimes
-     *
-     * @return ServerRequestInterface
-     */
-    private function prepareRequest(array $input, $parametersTimes = 1)
-    {
-        $request = new Request(function () {
-            throw new LogicException();
-        }, function () {
-            throw new LogicException();
-        }, function () use ($input) {
-            $this->actualCalls[self::QUERY_PARAMS]++;
-            return $input;
-        });
-
-        $this->expectedCalls[self::QUERY_PARAMS] = $parametersTimes;
-
-        return $request;
     }
 }

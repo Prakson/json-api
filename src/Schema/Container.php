@@ -326,28 +326,13 @@ class Container implements ContainerInterface, LoggerAwareInterface
     }
 
     /**
-     * @deprecated Use `createSchemaFromCallable` method instead.
-     *
-     * @param Closure $closure
-     *
-     * @return SchemaProviderInterface
-     */
-    protected function createSchemaFromClosure(Closure $closure): SchemaProviderInterface
-    {
-        $schema = $closure($this->getFactory());
-
-        return $schema;
-    }
-
-    /**
      * @param callable $callable
      *
      * @return SchemaProviderInterface
      */
     protected function createSchemaFromCallable(callable $callable): SchemaProviderInterface
     {
-        $schema = $callable instanceof Closure ?
-            $this->createSchemaFromClosure($callable) : call_user_func($callable, $this->getFactory());
+        $schema = call_user_func($callable, $this->getFactory());
 
         return $schema;
     }

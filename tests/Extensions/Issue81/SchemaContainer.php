@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 
-use Closure;
 use Neomerx\JsonApi\Contracts\Schema\SchemaProviderInterface;
 use Neomerx\JsonApi\Schema\Container;
 
@@ -28,9 +27,9 @@ class SchemaContainer extends Container
     /**
      * @inheritdoc
      */
-    protected function createSchemaFromClosure(Closure $closure): SchemaProviderInterface
+    protected function createSchemaFromCallable(callable $callable): SchemaProviderInterface
     {
-        $schema = $closure($this->getFactory(), $this);
+        $schema = call_user_func($callable, $this->getFactory(), $this);
 
         return $schema;
     }

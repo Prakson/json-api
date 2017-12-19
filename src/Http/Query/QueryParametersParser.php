@@ -23,7 +23,6 @@ use Neomerx\JsonApi\Contracts\Http\Query\QueryParametersParserInterface;
 use Neomerx\JsonApi\Document\Error;
 use Neomerx\JsonApi\Exceptions\JsonApiException as E;
 use Neomerx\JsonApi\I18n\Translator as T;
-use Psr\Http\Message\ServerRequestInterface;
 use Psr\Log\LoggerAwareInterface;
 use Psr\Log\LoggerAwareTrait;
 
@@ -50,15 +49,7 @@ class QueryParametersParser implements QueryParametersParserInterface, LoggerAwa
     /**
      * @inheritdoc
      */
-    public function parse(ServerRequestInterface $request): EncodingParametersInterface
-    {
-        return $this->parseQueryParameters($request->getQueryParams());
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function parseQueryParameters(array $parameters): EncodingParametersInterface
+    public function parse(array $parameters): EncodingParametersInterface
     {
         return $this->factory->createQueryParameters(
             $this->getIncludePaths($parameters),

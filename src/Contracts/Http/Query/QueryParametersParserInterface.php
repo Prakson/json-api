@@ -17,7 +17,6 @@
  */
 
 use Neomerx\JsonApi\Contracts\Encoder\Parameters\EncodingParametersInterface;
-use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @package Neomerx\JsonApi
@@ -39,15 +38,6 @@ interface QueryParametersParserInterface
     /** Parameter name */
     const PARAM_SORT = 'sort';
 
-    /** @deprecated Use `parseQueryParameters($request->getQueryParams())` instead.
-     * Parse input parameters from request.
-     *
-     * @param ServerRequestInterface $request
-     *
-     * @return EncodingParametersInterface
-     */
-    public function parse(ServerRequestInterface $request): EncodingParametersInterface;
-
     /**
      * Parse input parameters from request.
      *
@@ -55,5 +45,5 @@ interface QueryParametersParserInterface
      *
      * @return EncodingParametersInterface
      */
-    public function parseQueryParameters(array $parameters): EncodingParametersInterface;
+    public function parse(array $parameters): EncodingParametersInterface;
 }
